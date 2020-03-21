@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
+import './constants.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -17,10 +19,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
-  final questionList = [
-    'What your mother\'s name?',
-    'What is your brother\'s name?',
-  ];
+  final questionList = constantQuestionList;
 
   void _answerQuestionPressed() {
     setState(() {
@@ -38,21 +37,18 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: <Widget>[
-            Text('The question is: '),
-            RaisedButton(
-              child: QuestionWidget(
-                questionList[_questionIndex % 2],
-              ),
-              onPressed: _answerQuestionPressed,
+            QuestionWidget(
+              questionList[_questionIndex % questionList.length]
+                  ['questionText'],
             ),
-            RaisedButton(
-              child: Text('Answer 2'),
-              onPressed: _answerQuestionPressed,
-            ),
-            RaisedButton(
-              child: Text('Answer 3'),
-              onPressed: _answerQuestionPressed,
-            ),
+            // AnswerWidget(_answerQuestionPressed),
+            // AnswerWidget(_answerQuestionPressed),
+            // AnswerWidget(_answerQuestionPressed),
+            ...(questionList[_questionIndex % questionList.length]['answers']
+                    as List<String>)
+                .map((String answer) {
+              return AnswerWidget(_answerQuestionPressed, answer);
+            }).toList(),
           ],
         ),
       ),
