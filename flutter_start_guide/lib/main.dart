@@ -33,6 +33,13 @@ class _MyAppState extends State<MyApp> {
     print('Answer pressed is ' + _questionIndex.toString());
   }
 
+  void _resetQuiz() {
+    setState(() {
+      _totalScore = 0;
+      _questionIndex = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,6 +51,7 @@ class _MyAppState extends State<MyApp> {
             ? QuizWidget(_answerQuestionPressed, _questionList, _questionIndex)
             : ResultWidget(
                 totalScore: _totalScore,
+                resetQuizHandler: _resetQuiz,
               ),
       ),
     );
