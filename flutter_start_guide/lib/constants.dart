@@ -1,4 +1,4 @@
-final constantQuestionList = [
+const constantQuestionList = const [
   {
     'questionText': 'What your mother\'s name?',
     'answers': [

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_start_guide/quiz.dart';
+import 'package:flutter_start_guide/result.dart';
 
 import './question.dart';
 import './answer.dart';
@@ -19,7 +21,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
-  final questionList = constantQuestionList;
+  final _questionList = constantQuestionList;
 
   void _answerQuestionPressed() {
     setState(() {
@@ -35,22 +37,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('Hello with better UI'),
         ),
-        body: Column(
-          children: <Widget>[
-            QuestionWidget(
-              questionList[_questionIndex % questionList.length]
-                  ['questionText'],
-            ),
-            // AnswerWidget(_answerQuestionPressed),
-            // AnswerWidget(_answerQuestionPressed),
-            // AnswerWidget(_answerQuestionPressed),
-            ...(questionList[_questionIndex % questionList.length]['answers']
-                    as List<String>)
-                .map((String answer) {
-              return AnswerWidget(_answerQuestionPressed, answer);
-            }).toList(),
-          ],
-        ),
+        body: _questionIndex < _questionList.length
+            ? QuizWidget(_answerQuestionPressed, _questionList, _questionIndex)
+            : ResultWidget(),
       ),
     );
   }
