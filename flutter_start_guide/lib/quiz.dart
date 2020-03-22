@@ -18,9 +18,13 @@ class QuizWidget extends StatelessWidget {
           questionList[questionIndex % questionList.length]['questionText'],
         ),
         ...(questionList[questionIndex % questionList.length]['answers']
-                as List<String>)
-            .map((String answer) {
-          return AnswerWidget(answerClickHandler, answer);
+                as List<Map<String, Object>>)
+            .map((Map<String, Object> answerObject) {
+          return AnswerWidget(
+            () => answerClickHandler(answerObject[
+                'score']), // return the result of executing the fxn
+            answerObject['text'],
+          );
         }).toList(),
       ],
     );

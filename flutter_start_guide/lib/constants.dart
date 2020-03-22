@@ -1,29 +1,29 @@
 const constantQuestionList = const [
   {
-    'questionText': 'What your mother\'s name?',
+    'questionText': 'What\'s your favorite color?',
     'answers': [
-      'Rita',
-      'Gita',
-      'Meera',
-      'Anjana',
+      {'text': 'Black', 'score': 10},
+      {'text': 'Red', 'score': 5},
+      {'text': 'Green', 'score': 3},
+      {'text': 'White', 'score': 1},
     ],
   },
   {
-    'questionText': 'What is your favorite bird?',
+    'questionText': 'What\'s your favorite animal?',
     'answers': [
-      'Ostrich',
-      'Swan',
-      'Parrot',
-      'Robin',
+      {'text': 'Rabbit', 'score': 3},
+      {'text': 'Snake', 'score': 11},
+      {'text': 'Elephant', 'score': 5},
+      {'text': 'Lion', 'score': 9},
     ],
   },
   {
-    'questionText': 'Who is your favorite cartoon character?',
+    'questionText': 'Who\'s your favorite instructor?',
     'answers': [
-      'Ichigo Kurosake',
-      'Puss in Boots',
-      'Homer Simpson',
-      'Stewie Griffin',
+      {'text': 'Max', 'score': 1},
+      {'text': 'Max', 'score': 1},
+      {'text': 'Max', 'score': 1},
+      {'text': 'Max', 'score': 1},
     ],
   },
 ];

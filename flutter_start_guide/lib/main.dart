@@ -22,8 +22,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
   final _questionList = constantQuestionList;
+  var _totalScore = 0;
 
-  void _answerQuestionPressed() {
+  void _answerQuestionPressed(int answerTextScore) {
+    _totalScore += answerTextScore;
+
     setState(() {
       _questionIndex++;
     });
@@ -39,7 +42,9 @@ class _MyAppState extends State<MyApp> {
         ),
         body: _questionIndex < _questionList.length
             ? QuizWidget(_answerQuestionPressed, _questionList, _questionIndex)
-            : ResultWidget(),
+            : ResultWidget(
+                totalScore: _totalScore,
+              ),
       ),
     );
   }
