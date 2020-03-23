@@ -10,56 +10,62 @@ class TranscationListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: _userTxnList.map((eachTranscation) {
-        return Card(
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 15,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.purpleAccent,
-                    width: 2,
+    return Container(
+      height: 300,
+      child: ListView.builder(
+        itemBuilder: (buildContext, itemIndex) {
+          return Card(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 15,
                   ),
-                ),
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  '\$${eachTranscation.amount}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.purpleAccent,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.purpleAccent,
+                      width: 2,
+                    ),
                   ),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    eachTranscation.title,
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    '\$${_userTxnList[itemIndex].amount}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      //color: Colors.purpleAccent,
+                      fontSize: 20,
+                      color: Colors.purpleAccent,
                     ),
                   ),
-                  Text(
-                    DateFormat.yMMMd().format(eachTranscation.dateTime),
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      _userTxnList[itemIndex].title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        //color: Colors.purpleAccent,
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        );
-      }).toList(),
+                    Text(
+                      DateFormat.yMMMd()
+                          .format(_userTxnList[itemIndex].dateTime),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+        itemCount: _userTxnList.length,
+        //children: _userTxnList.map((eachTranscation) {}).toList(),
+      ),
     );
   }
 }
