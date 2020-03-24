@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../constants.dart';
 import 'package:intl/intl.dart';
 
 import '../models/transcationModel.dart';
@@ -43,18 +45,19 @@ class TranscationListWidget extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       _userTxnList[itemIndex].title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        //color: Colors.purpleAccent,
-                      ),
+                      style: Theme.of(context).textTheme.title,
+                      // TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   fontSize: ITEM_DESCRIPTION_FONT_SIZE,
+                      //   //color: Colors.purpleAccent,
+                      // ),
                     ),
                     Text(
                       DateFormat.yMMMd()
                           .format(_userTxnList[itemIndex].dateTime),
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 16,
+                        fontSize: ITEM_DESCRIPTION_FONT_SIZE,
                       ),
                     ),
                   ],
