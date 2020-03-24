@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
-class NewTransactionWidget extends StatelessWidget {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
-
+class NewTransactionWidget extends StatefulWidget {
   final Function addTransactionHandler;
 
   NewTransactionWidget({this.addTransactionHandler});
+
+  @override
+  _NewTransactionWidgetState createState() => _NewTransactionWidgetState();
+}
+
+class _NewTransactionWidgetState extends State<NewTransactionWidget> {
+  final titleController = TextEditingController();
+
+  final amountController = TextEditingController();
 
   void submitData() {
     final enteredTitle = titleController.text;
@@ -16,10 +22,13 @@ class NewTransactionWidget extends StatelessWidget {
       return;
     }
 
-    addTransactionHandler(
+    widget.addTransactionHandler(
       titleController.text,
       double.parse(amountController.text),
     );
+
+    // closes the topmost model that is displayed in this case the bottom sheet
+    Navigator.of(context).pop();
   }
 
   @override
