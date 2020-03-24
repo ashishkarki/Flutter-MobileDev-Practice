@@ -23,6 +23,14 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Expense Tracker'),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
+              onPressed: () {})
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -41,6 +49,11 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: null,
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
