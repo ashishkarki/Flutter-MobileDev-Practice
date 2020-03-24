@@ -24,7 +24,7 @@ class TranscationListWidget extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.purpleAccent,
+                      color: Theme.of(context).primaryColor,
                       width: 2,
                     ),
                   ),
@@ -34,7 +34,7 @@ class TranscationListWidget extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: Colors.purpleAccent,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),

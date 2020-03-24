@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/constants.dart';
 
 import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
@@ -11,7 +12,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Based Expense Tracker App',
+      title: APP_NAME_STRING,
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        accentColor: Colors.amberAccent,
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.greenAccent),
+        ),
+      ),
       home: MyHomePage(),
     );
   }
@@ -70,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Expense Tracker'),
+        title: Text(APP_NAME_STRING),
         actions: <Widget>[
           IconButton(
               icon: Icon(
