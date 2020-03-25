@@ -8,6 +8,14 @@ import 'models/transcationModel.dart';
 
 void main() => runApp(MyApp());
 
+// void main() {
+//   SystemChrome.setPreferredOrientations([
+//     DeviceOrientation.portraitUp,
+//     DeviceOrientation.portraitDown,
+//   ]);
+//   runApp(MyApp());
+// }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -48,6 +56,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<TransactionModel> _userTxnList = [];
+  var _showChart = false;
 
   List<TransactionModel> get _recentTransactions {
     return _userTxnList.where((transaction) {
@@ -96,6 +105,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscapeMode =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final myAppBar = AppBar(
       title: Text(
         APP_NAME_STRING,
@@ -116,6 +128,16 @@ class _MyHomePageState extends State<MyHomePage> {
     final appBodyHeightOnly = (MediaQuery.of(context).size.height -
         myAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top);
+    final curScaleFactor =
+        MediaQuery.of(context).textScaleFactor; // TODO: SEE WHERE TO USE
+    final chartWidgetExpression = Container(
+      height: appBodyHeightOnly * 0.3,
+      child: ChartWidget(_recentTransactions),
+    );
+    final txWidgetExpression = Container(
+      height: appBodyHeightOnly * TX_LIST_HEIGHT_PERCENT,
+      child: TranscationListWidget(_userTxnList, _deleteTransaction),
+    );
 
     return Scaffold(
       appBar: myAppBar,
@@ -124,14 +146,26 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: appBodyHeightOnly * 0.4,
-              child: ChartWidget(_recentTransactions),
-            ), // chart widget
-            Container(
-              height: appBodyHeightOnly * 0.6,
-              child: TranscationListWidget(_userTxnList, _deleteTransaction),
-            ),
+            if (isLandscapeMode)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('Show Chart'),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (newVal) {
+                        setState(() {
+                          _showChart = newVal;
+                        });
+                      }),
+                ],
+              ),
+            if (!isLandscapeMode) chartWidgetExpression,
+            if (!isLandscapeMode) txWidgetExpression,
+            if (isLandscapeMode)
+              _showChart
+                  ? chartWidgetExpression // chart widget
+                  : txWidgetExpression,
           ],
         ),
       ),

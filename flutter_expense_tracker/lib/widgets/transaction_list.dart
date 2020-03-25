@@ -17,25 +17,27 @@ class TranscationListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _userTxnList.isEmpty
-        ? Column(
-            children: <Widget>[
-              Text(
-                'No transactions yet. Add Now.',
-                style: Theme.of(context).textTheme.title,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                // to stop the image from overflowing
-                height: 200,
-                child: Image.asset(
-                  'assets/images/waiting.png',
-                  //fit: BoxFit.cover,
+        ? LayoutBuilder(builder: (ctx, constraints) {
+            return Column(
+              children: <Widget>[
+                Text(
+                  'No transactions yet. Add Now.',
+                  style: Theme.of(context).textTheme.title,
                 ),
-              ),
-            ],
-          )
+                SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  // to stop the image from overflowing
+                  height: constraints.maxHeight * TX_LIST_IMAGE_PERCENT,
+                  child: Image.asset(
+                    'assets/images/waiting.png',
+                    //fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            );
+          })
         : ListView.builder(
             // Note: ListView takes up all the availble space
             itemBuilder: (buildContext, itemIndex) {
