@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/widgets/chart_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../models/transcationModel.dart';
@@ -24,7 +25,19 @@ class ChartWidget extends StatelessWidget {
         }
       }
 
-      return {'day': DateFormat.E(weekDay), 'amount': totalSum};
+      print(DateFormat.E().format(weekDay));
+      print(totalSum);
+
+      return {
+        'day': DateFormat.E().format(weekDay).substring(0, 1),
+        'amount': totalSum,
+      };
+    });
+  }
+
+  double get maxSpending {
+    return groupedTransactionValues.fold(0.0, (sum, txItem) {
+      return sum + txItem['amount'];
     });
   }
 
@@ -34,7 +47,20 @@ class ChartWidget extends StatelessWidget {
       elevation: 7,
       margin: EdgeInsets.all(20),
       child: Row(
-        children: <Widget>[],
+        children: groupedTransactionValues.map((txObject) {
+          print('PRINTED::' +
+              maxSpending.toString() +
+              (txObject['amount'] as double).toString() +
+              ((txObject['amount'] as double) / maxSpending).toString());
+          return ChartBarWidget(
+            txObject['day'],
+            txObject['amount'],
+            maxSpending == 0.0
+                ? 0.0
+                : (txObject['amount'] as double) / maxSpending,
+          );
+          //Text('${txObject['day']}: ${txObject['amount']}****');
+        }).toList(),
       ),
     );
   }

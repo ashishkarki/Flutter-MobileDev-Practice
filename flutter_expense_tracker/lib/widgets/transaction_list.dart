@@ -52,7 +52,7 @@ class TranscationListWidget extends StatelessWidget {
                         ),
                         padding: EdgeInsets.all(10),
                         child: Text(
-                          '\$${_userTxnList[itemIndex].amount.toStringAsFixed(2)}',
+                          '$CURRENT_CURRENCY_SYMBOL${_userTxnList[itemIndex].amount.toStringAsFixed(2)}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,

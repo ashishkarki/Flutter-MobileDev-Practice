@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/constants.dart';
 
+import './constants.dart';
+import './widgets/chart.dart';
 import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
 import 'models/transcationModel.dart';
@@ -44,20 +45,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<TransactionModel> _userTxnList = [
-    // TransactionModel(
-    //   id: "t1",
-    //   title: "Jeans",
-    //   amount: 40.99,
-    //   dateTime: DateTime.now(),
-    // ),
-    // TransactionModel(
-    //   id: "t2",
-    //   title: "Groceries",
-    //   amount: 100.15,
-    //   dateTime: DateTime.now(),
-    // ),
-  ];
+  final List<TransactionModel> _userTxnList = [];
+
+  List<TransactionModel> get _recentTransactions {
+    return _userTxnList.where((transaction) {
+      return transaction.dateTime.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTransaction = TransactionModel(
@@ -89,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(_recentTransactions);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -111,14 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blueGrey,
-                child: Text('SOME CHART!!'),
-                elevation: 5,
-              ),
-            ),
+            ChartWidget(_recentTransactions), // chart widget
             TranscationListWidget(_userTxnList),
           ],
         ),
