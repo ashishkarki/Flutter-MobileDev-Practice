@@ -105,8 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscapeMode =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQryCtx = MediaQuery.of(context);
+    final isLandscapeMode = mediaQryCtx.orientation == Orientation.landscape;
 
     final myAppBar = AppBar(
       title: Text(
@@ -125,11 +125,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
-    final appBodyHeightOnly = (MediaQuery.of(context).size.height -
+    final appBodyHeightOnly = (mediaQryCtx.size.height -
         myAppBar.preferredSize.height -
-        MediaQuery.of(context).padding.top);
+        mediaQryCtx.padding.top);
     final curScaleFactor =
-        MediaQuery.of(context).textScaleFactor; // TODO: SEE WHERE TO USE
+        mediaQryCtx.textScaleFactor; // TODO: SEE WHERE TO USE
     final chartWidgetExpression = Container(
       height: appBodyHeightOnly * 0.3,
       child: ChartWidget(_recentTransactions),

@@ -53,6 +53,8 @@ class _NewTransactionWidgetState extends State<NewTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQryCtx = MediaQuery.of(context);
+
     return SingleChildScrollView(
       child: Card(
         elevation: 6,
@@ -62,7 +64,7 @@ class _NewTransactionWidgetState extends State<NewTransactionWidget> {
             top: 10,
             left: 10,
             right: 10,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+            bottom: mediaQryCtx.viewInsets.bottom + 10,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,

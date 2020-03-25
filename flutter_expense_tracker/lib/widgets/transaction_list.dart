@@ -16,6 +16,8 @@ class TranscationListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQryCtx = MediaQuery.of(context);
+
     return _userTxnList.isEmpty
         ? LayoutBuilder(builder: (ctx, constraints) {
             return Column(
@@ -65,8 +67,7 @@ class TranscationListWidget extends StatelessWidget {
                   subtitle: Text(
                     DateFormat.yMMMd().format(_userTxnList[itemIndex].dateTime),
                   ),
-                  trailing: MediaQuery.of(context).size.width >
-                          DELETE_TEXT_SHOW_SIZE
+                  trailing: mediaQryCtx.size.width > DELETE_TEXT_SHOW_SIZE
                       ? FlatButton.icon(
                           onPressed: () =>
                               _deleteTransaction(_userTxnList[itemIndex].id),
