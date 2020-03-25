@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/widgets/main_body.dart';
 
 import './constants.dart';
-import './widgets/chart.dart';
-import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
 import 'models/transcationModel.dart';
 
@@ -59,17 +58,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<TransactionModel> _userTxnList = [];
-  var _showChart = false;
-
-  List<TransactionModel> get _recentTransactions {
-    return _userTxnList.where((transaction) {
-      return transaction.dateTime.isAfter(
-        DateTime.now().subtract(
-          Duration(days: 7),
-        ),
-      );
-    }).toList();
-  }
 
   void _addNewTransaction(
       String txTitle, double txAmount, DateTime txDateTime) {
@@ -100,18 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _deleteTransaction(String deletedItemId) {
-    setState(() {
-      _userTxnList.removeWhere((tx) => tx.id == deletedItemId);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final themeCtx = Theme.of(context);
-    final mediaQryCtx = MediaQuery.of(context);
-    final isLandscapeMode = mediaQryCtx.orientation == Orientation.landscape;
-
     final PreferredSizeWidget myAppBar = Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text(APP_NAME_STRING),
@@ -142,51 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           );
 
-    final appBodyHeightOnly = (mediaQryCtx.size.height -
-        myAppBar.preferredSize.height -
-        mediaQryCtx.padding.top);
-    final curScaleFactor =
-        mediaQryCtx.textScaleFactor; // TODO: SEE WHERE TO USE
-    final chartWidgetExpression = Container(
-      height: appBodyHeightOnly * 0.3,
-      child: ChartWidget(_recentTransactions),
-    );
-    final txWidgetExpression = Container(
-      height: appBodyHeightOnly * TX_LIST_HEIGHT_PERCENT,
-      child: TranscationListWidget(_userTxnList, _deleteTransaction),
-    );
     final pageBody = SafeArea(
         child: SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (isLandscapeMode)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Show Chart',
-                  style: themeCtx.textTheme.title,
-                ),
-                Switch.adaptive(
-                    // makes this switch adapt based on ios or android
-                    value: _showChart,
-                    onChanged: (newVal) {
-                      setState(() {
-                        _showChart = newVal;
-                      });
-                    }),
-              ],
-            ),
-          if (!isLandscapeMode) chartWidgetExpression,
-          if (!isLandscapeMode) txWidgetExpression,
-          if (isLandscapeMode)
-            _showChart
-                ? chartWidgetExpression // chart widget
-                : txWidgetExpression,
-        ],
-      ),
+      child: MainBodyWidget(myAppBar, _userTxnList),
     ));
 
     return Platform.isIOS
