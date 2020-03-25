@@ -7,13 +7,17 @@ import '../models/transcationModel.dart';
 
 class TranscationListWidget extends StatelessWidget {
   final List<TransactionModel> _userTxnList;
+  final Function _deleteTransaction;
 
-  TranscationListWidget(this._userTxnList);
+  TranscationListWidget(
+    this._userTxnList,
+    this._deleteTransaction,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 440,
       child: _userTxnList.isEmpty
           ? Column(
               children: <Widget>[
@@ -35,6 +39,7 @@ class TranscationListWidget extends StatelessWidget {
               ],
             )
           : ListView.builder(
+              // Note: ListView takes up all the availble space
               itemBuilder: (buildContext, itemIndex) {
                 return Card(
                   elevation: 6,
@@ -61,7 +66,12 @@ class TranscationListWidget extends StatelessWidget {
                       DateFormat.yMMMd()
                           .format(_userTxnList[itemIndex].dateTime),
                     ),
-                    trailing: null,
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      color: Theme.of(context).errorColor,
+                      onPressed: () =>
+                          _deleteTransaction(_userTxnList[itemIndex].id),
+                    ),
                   ),
                 );
               },

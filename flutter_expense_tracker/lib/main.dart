@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 import './constants.dart';
@@ -17,13 +16,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amberAccent,
+        errorColor: Colors.redAccent,
         fontFamily: 'Baloo2',
         textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
-              fontFamily: 'OpenSans',
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            )),
+              title: TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+              button: TextStyle(color: Colors.white),
+            ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
                 title: TextStyle(
@@ -57,12 +59,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime txDateTime) {
     final newTransaction = TransactionModel(
       title: txTitle,
       amount: txAmount,
-      id: Random().nextInt(10000).toString(),
-      dateTime: DateTime.now(),
+      id: DateTime.now().toString(),
+      dateTime: txDateTime,
     );
 
     setState(() {
@@ -83,6 +86,12 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  void _deleteTransaction(String deletedItemId) {
+    setState(() {
+      _userTxnList.removeWhere((tx) => tx.id == deletedItemId);
+    });
   }
 
   @override
@@ -111,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             ChartWidget(_recentTransactions), // chart widget
-            TranscationListWidget(_userTxnList),
+            TranscationListWidget(_userTxnList, _deleteTransaction),
           ],
         ),
       ),
