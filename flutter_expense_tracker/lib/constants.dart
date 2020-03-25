@@ -1,3 +1,7 @@
 const APP_NAME_STRING = 'Flutter Based Expense Tracker App';
 const double ITEM_DESCRIPTION_FONT_SIZE = 18;
 const CURRENT_CURRENCY_SYMBOL = '\$';
+const CHART_BAR_HEIGHT_PERCENT = 0.7;
+const TX_LIST_HEIGHT_PERCENT = 0.7;
+const TX_LIST_IMAGE_PERCENT = 0.6;
+const DELETE_TEXT_SHOW_SIZE = 460;

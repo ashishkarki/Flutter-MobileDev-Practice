@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './constants.dart';
@@ -7,6 +10,14 @@ import './widgets/new_transaction.dart';
 import 'models/transcationModel.dart';
 
 void main() => runApp(MyApp());
+
+// void main() {
+//   SystemChrome.setPreferredOrientations([
+//     DeviceOrientation.portraitUp,
+//     DeviceOrientation.portraitDown,
+//   ]);
+//   runApp(MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   @override
@@ -48,6 +59,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<TransactionModel> _userTxnList = [];
+  var _showChart = false;
 
   List<TransactionModel> get _recentTransactions {
     return _userTxnList.where((transaction) {
@@ -96,39 +108,103 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(_recentTransactions);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          APP_NAME_STRING,
-          style: TextStyle(
-            fontFamily: 'Baloo2',
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(
-                Icons.add,
-                color: Colors.white,
+    final themeCtx = Theme.of(context);
+    final mediaQryCtx = MediaQuery.of(context);
+    final isLandscapeMode = mediaQryCtx.orientation == Orientation.landscape;
+
+    final PreferredSizeWidget myAppBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text(APP_NAME_STRING),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () => _startAddNewTransaction,
+                  child: Icon(CupertinoIcons.add),
+                )
+              ],
+            ),
+          )
+        : AppBar(
+            title: Text(
+              APP_NAME_STRING,
+              style: TextStyle(
+                fontFamily: 'Baloo2',
               ),
-              onPressed: () => _startAddNewTransaction(context))
+            ),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _startAddNewTransaction(context))
+            ],
+          );
+
+    final appBodyHeightOnly = (mediaQryCtx.size.height -
+        myAppBar.preferredSize.height -
+        mediaQryCtx.padding.top);
+    final curScaleFactor =
+        mediaQryCtx.textScaleFactor; // TODO: SEE WHERE TO USE
+    final chartWidgetExpression = Container(
+      height: appBodyHeightOnly * 0.3,
+      child: ChartWidget(_recentTransactions),
+    );
+    final txWidgetExpression = Container(
+      height: appBodyHeightOnly * TX_LIST_HEIGHT_PERCENT,
+      child: TranscationListWidget(_userTxnList, _deleteTransaction),
+    );
+    final pageBody = SafeArea(
+        child: SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          if (isLandscapeMode)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Show Chart',
+                  style: themeCtx.textTheme.title,
+                ),
+                Switch.adaptive(
+                    // makes this switch adapt based on ios or android
+                    value: _showChart,
+                    onChanged: (newVal) {
+                      setState(() {
+                        _showChart = newVal;
+                      });
+                    }),
+              ],
+            ),
+          if (!isLandscapeMode) chartWidgetExpression,
+          if (!isLandscapeMode) txWidgetExpression,
+          if (isLandscapeMode)
+            _showChart
+                ? chartWidgetExpression // chart widget
+                : txWidgetExpression,
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            ChartWidget(_recentTransactions), // chart widget
-            TranscationListWidget(_userTxnList, _deleteTransaction),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _startAddNewTransaction(context),
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+    ));
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBody,
+            navigationBar: myAppBar,
+          )
+        : Scaffold(
+            appBar: myAppBar,
+            body: pageBody,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    onPressed: () => _startAddNewTransaction(context),
+                    child: Icon(Icons.add),
+                  ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
   }
 }
