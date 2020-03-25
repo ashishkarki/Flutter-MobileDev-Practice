@@ -16,6 +16,7 @@ class TranscationListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeCtx = Theme.of(context);
     final mediaQryCtx = MediaQuery.of(context);
 
     return _userTxnList.isEmpty
@@ -24,7 +25,7 @@ class TranscationListWidget extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'No transactions yet. Add Now.',
-                  style: Theme.of(context).textTheme.title,
+                  style: themeCtx.textTheme.title,
                 ),
                 SizedBox(
                   height: 20,
@@ -62,7 +63,7 @@ class TranscationListWidget extends StatelessWidget {
                   ),
                   title: Text(
                     _userTxnList[itemIndex].title,
-                    style: Theme.of(context).textTheme.title,
+                    style: themeCtx.textTheme.title,
                   ),
                   subtitle: Text(
                     DateFormat.yMMMd().format(_userTxnList[itemIndex].dateTime),
@@ -73,11 +74,11 @@ class TranscationListWidget extends StatelessWidget {
                               _deleteTransaction(_userTxnList[itemIndex].id),
                           icon: Icon(Icons.delete),
                           label: Text('Delete Tx'),
-                          textColor: Theme.of(context).errorColor,
+                          textColor: themeCtx.errorColor,
                         )
                       : IconButton(
                           icon: Icon(Icons.delete),
-                          color: Theme.of(context).errorColor,
+                          color: themeCtx.errorColor,
                           onPressed: () =>
                               _deleteTransaction(_userTxnList[itemIndex].id),
                         ),

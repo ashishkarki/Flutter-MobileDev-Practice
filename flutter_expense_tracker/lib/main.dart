@@ -108,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeCtx = Theme.of(context);
     final mediaQryCtx = MediaQuery.of(context);
     final isLandscapeMode = mediaQryCtx.orientation == Orientation.landscape;
 
@@ -154,7 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
       height: appBodyHeightOnly * TX_LIST_HEIGHT_PERCENT,
       child: TranscationListWidget(_userTxnList, _deleteTransaction),
     );
-    final pageBody = SingleChildScrollView(
+    final pageBody = SafeArea(
+        child: SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -163,7 +165,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Show Chart'),
+                Text(
+                  'Show Chart',
+                  style: themeCtx.textTheme.title,
+                ),
                 Switch.adaptive(
                     // makes this switch adapt based on ios or android
                     value: _showChart,
@@ -182,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 : txWidgetExpression,
         ],
       ),
-    );
+    ));
 
     return Platform.isIOS
         ? CupertinoPageScaffold(

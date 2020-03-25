@@ -11,6 +11,8 @@ class ChartBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeCtx = Theme.of(context);
+
     return LayoutBuilder(
       builder: (ctx, constraints) {
         // constraints that is applied to this widget: chartbarwidget
@@ -46,7 +48,7 @@ class ChartBarWidget extends StatelessWidget {
                     heightFactor: spendingPercentOfTotal,
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
+                          color: themeCtx.primaryColor,
                           borderRadius: BorderRadius.circular(20)),
                     ),
                   ),

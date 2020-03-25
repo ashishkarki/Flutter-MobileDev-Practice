@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -53,6 +56,7 @@ class _NewTransactionWidgetState extends State<NewTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final themeCtx = Theme.of(context);
     final mediaQryCtx = MediaQuery.of(context);
 
     return SingleChildScrollView(
@@ -94,21 +98,33 @@ class _NewTransactionWidgetState extends State<NewTransactionWidget> {
                           : 'Selected Date: ${DateFormat.yMd().format(_userSelectedDatetime)}',
                     ),
                   ),
-                  FlatButton(
-                    textColor: Theme.of(context).primaryColor,
-                    child: Text(
-                      'Select Date',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: _displayDatePicker,
-                  ),
+                  Platform.isIOS
+                      ? CupertinoButton(
+                          child: Text(
+                            'Select Date',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: null,
+                        )
+                      : FlatButton(
+                          textColor: themeCtx.primaryColor,
+                          child: Text(
+                            'Select Date',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: _displayDatePicker,
+                        ),
                 ],
               ),
               RaisedButton(
                 onPressed: _submitData,
                 child: Text('Add Transaction'),
-                color: Theme.of(context).primaryColor,
-                textColor: Theme.of(context).textTheme.button.color,
+                color: themeCtx.primaryColor,
+                textColor: themeCtx.textTheme.button.color,
               )
             ],
           ),
