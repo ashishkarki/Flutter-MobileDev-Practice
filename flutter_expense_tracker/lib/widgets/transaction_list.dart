@@ -17,7 +17,7 @@ class TranscationListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 440,
       child: _userTxnList.isEmpty
           ? Column(
               children: <Widget>[
@@ -39,6 +39,7 @@ class TranscationListWidget extends StatelessWidget {
               ],
             )
           : ListView.builder(
+              // Note: ListView takes up all the availble space
               itemBuilder: (buildContext, itemIndex) {
                 return Card(
                   elevation: 6,
