@@ -44,7 +44,7 @@ class _MainBodyWidgetState extends State<MainBodyWidget> {
         widget.myAppBar.preferredSize.height -
         mediaQryCtx.padding.top);
     // final curScaleFactor =
-    //     mediaQryCtx.textScaleFactor; // TODO: SEE WHERE TO USE
+    //     mediaQryCtx.textScaleFactor;
     final chartWidgetExpression = Container(
       height: appBodyHeightOnly * 0.3,
       child: ChartWidget(_recentTransactions),
