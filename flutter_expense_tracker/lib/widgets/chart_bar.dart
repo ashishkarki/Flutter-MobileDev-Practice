@@ -13,7 +13,10 @@ class ChartBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text('$CURRENT_CURRENCY_SYMBOL${spendingAmount.toStringAsFixed(0)}'),
+        FittedBox(
+          child: Text(
+              '$CURRENT_CURRENCY_SYMBOL${spendingAmount.toStringAsFixed(0)}'),
+        ),
         SizedBox(
           height: 4,
         ),

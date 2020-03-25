@@ -46,21 +46,28 @@ class ChartWidget extends StatelessWidget {
     return Card(
       elevation: 7,
       margin: EdgeInsets.all(20),
-      child: Row(
-        children: groupedTransactionValues.map((txObject) {
-          print('PRINTED::' +
-              maxSpending.toString() +
-              (txObject['amount'] as double).toString() +
-              ((txObject['amount'] as double) / maxSpending).toString());
-          return ChartBarWidget(
-            txObject['day'],
-            txObject['amount'],
-            maxSpending == 0.0
-                ? 0.0
-                : (txObject['amount'] as double) / maxSpending,
-          );
-          //Text('${txObject['day']}: ${txObject['amount']}****');
-        }).toList(),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransactionValues.map((txObject) {
+            return Flexible(
+              // also see Expanded() which is Flexible with FlexFit.tight
+              // allows the ChartBarWidget to take up whatever space is available.
+              // since more than one chartbar has the flexfit.tight configuration (due to the map loop),
+              // the available space is equally split amongst them
+              fit: FlexFit.tight,
+              child: ChartBarWidget(
+                txObject['day'],
+                txObject['amount'],
+                maxSpending == 0.0
+                    ? 0.0
+                    : (txObject['amount'] as double) / maxSpending,
+              ),
+            );
+            //Text('${txObject['day']}: ${txObject['amount']}****');
+          }).toList(),
+        ),
       ),
     );
   }
