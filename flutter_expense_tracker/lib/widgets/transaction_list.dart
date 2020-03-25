@@ -37,52 +37,31 @@ class TranscationListWidget extends StatelessWidget {
           : ListView.builder(
               itemBuilder: (buildContext, itemIndex) {
                 return Card(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 15,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Theme.of(context).primaryColor,
-                            width: 2,
-                          ),
-                        ),
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          '$CURRENT_CURRENCY_SYMBOL${_userTxnList[itemIndex].amount.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                  elevation: 6,
+                  margin: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 5,
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: const EdgeInsets.all(7.0),
+                        child: FittedBox(
+                          child: Text(
+                              '$CURRENT_CURRENCY_SYMBOL${_userTxnList[itemIndex].amount.toStringAsFixed(2)}'),
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            _userTxnList[itemIndex].title,
-                            style: Theme.of(context).textTheme.title,
-                            // TextStyle(
-                            //   fontWeight: FontWeight.bold,
-                            //   fontSize: ITEM_DESCRIPTION_FONT_SIZE,
-                            //   //color: Colors.purpleAccent,
-                            // ),
-                          ),
-                          Text(
-                            DateFormat.yMMMd()
-                                .format(_userTxnList[itemIndex].dateTime),
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: ITEM_DESCRIPTION_FONT_SIZE,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+                    ),
+                    title: Text(
+                      _userTxnList[itemIndex].title,
+                      style: Theme.of(context).textTheme.title,
+                    ),
+                    subtitle: Text(
+                      DateFormat.yMMMd()
+                          .format(_userTxnList[itemIndex].dateTime),
+                    ),
+                    trailing: null,
                   ),
                 );
               },
