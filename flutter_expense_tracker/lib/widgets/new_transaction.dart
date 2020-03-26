@@ -7,7 +7,9 @@ import '../widgets/adaptive_flat_button.dart';
 class NewTransactionWidget extends StatefulWidget {
   final Function addTransactionHandler;
 
-  NewTransactionWidget({this.addTransactionHandler});
+  NewTransactionWidget({this.addTransactionHandler}) {
+    print('Constructor NewTransactionWidget');
+  }
 
   @override
   _NewTransactionWidgetState createState() => _NewTransactionWidgetState();
@@ -56,6 +58,7 @@ class _NewTransactionWidgetState extends State<NewTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('build() NewTransactionWidget');
     final themeCtx = Theme.of(context);
     final mediaQryCtx = MediaQuery.of(context);
 

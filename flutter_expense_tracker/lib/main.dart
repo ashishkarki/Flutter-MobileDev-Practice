@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('build() _MyHomePageState');
     final PreferredSizeWidget myAppBar = Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text(APP_NAME_STRING),

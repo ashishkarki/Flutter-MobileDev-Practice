@@ -7,7 +7,9 @@ import '../models/transcationModel.dart';
 class ChartWidget extends StatelessWidget {
   final List<TransactionModel> recentTransactions;
 
-  ChartWidget(this.recentTransactions);
+  ChartWidget(this.recentTransactions) {
+    print('Constructor ChartWidget');
+  }
 
   List<Map<String, Object>> get groupedTransactionValues {
     return List.generate(7, (index) {
@@ -43,6 +45,7 @@ class ChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('build() ChartWidget');
     return Card(
       elevation: 7,
       margin: EdgeInsets.all(20),

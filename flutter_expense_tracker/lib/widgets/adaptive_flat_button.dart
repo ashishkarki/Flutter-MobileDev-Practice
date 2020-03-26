@@ -11,6 +11,7 @@ class AdaptiveFlatButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('build() AdaptiveFlatButtonWidget');
     final themeCtx = Theme.of(context);
 
     return Platform.isIOS

@@ -9,7 +9,9 @@ class MainBodyWidget extends StatefulWidget {
   final PreferredSizeWidget myAppBar;
   final List<TransactionModel> _userTxnList;
 
-  MainBodyWidget(this.myAppBar, this._userTxnList);
+  MainBodyWidget(this.myAppBar, this._userTxnList) {
+    print('Constructor MainBodyWidget');
+  }
 
   @override
   _MainBodyWidgetState createState() => _MainBodyWidgetState();
@@ -36,6 +38,7 @@ class _MainBodyWidgetState extends State<MainBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('build() _MainBodyWidgetState');
     final themeCtx = Theme.of(context);
     final mediaQryCtx = MediaQuery.of(context);
     final isLandscapeMode = mediaQryCtx.orientation == Orientation.landscape;
