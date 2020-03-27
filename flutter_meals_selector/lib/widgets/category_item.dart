@@ -3,15 +3,16 @@ import 'package:flutter_meals_selector/constants.dart';
 import 'package:flutter_meals_selector/widgets/category_meals_screen.dart';
 
 class CategoryItemWidget extends StatelessWidget {
+  final String id;
   final String title;
   final Color color;
 
-  CategoryItemWidget(this.title, this.color);
+  CategoryItemWidget(this.id, this.title, this.color);
 
   void selectCategory(BuildContext ctx) {
     Navigator.of(ctx).push(
       MaterialPageRoute(
-        builder: (_) => CategoryMealsScreenWidget(),
+        builder: (_) => CategoryMealsScreenWidget(id, title),
       ),
     );
   }
