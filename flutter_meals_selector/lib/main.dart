@@ -12,9 +12,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: APP_NAME_STRING,
       theme: mainAppThemeObject,
-      home: CategoriesScreenWidget(),
+      // home: CategoriesScreenWidget(),
+      initialRoute: '/', //can ignore since '/' is default initial route
       routes: {
-        '/categories-meals': (ctx) => CategoryMealsScreenWidget(),
+        '/': (ctx) => CategoriesScreenWidget(),
+        CategoryMealsScreenWidget().routeName: (ctx) =>
+            CategoryMealsScreenWidget(),
       },
     );
   }
