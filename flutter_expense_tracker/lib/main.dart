@@ -56,7 +56,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<TransactionModel> _userTxnList = [];
 
   void _addNewTransaction(
@@ -88,37 +88,66 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  PreferredSizeWidget _cupertinoNavigationBarBuilder() {
+    return CupertinoNavigationBar(
+      middle: Text(APP_NAME_STRING),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () => _startAddNewTransaction,
+            child: Icon(CupertinoIcons.add),
+          )
+        ],
+      ),
+    );
+  }
+
+  PreferredSizeWidget _materialNavigationBarBuilder() {
+    return AppBar(
+      title: Text(
+        APP_NAME_STRING,
+        style: TextStyle(
+          fontFamily: 'Baloo2',
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () => _startAddNewTransaction(context))
+      ],
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  // mixin overridden method
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print("state from main.dart in didChangeAppLifecycleState: " +
+        state.toString());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('build() _MyHomePageState');
     final PreferredSizeWidget myAppBar = Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: Text(APP_NAME_STRING),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () => _startAddNewTransaction,
-                  child: Icon(CupertinoIcons.add),
-                )
-              ],
-            ),
-          )
-        : AppBar(
-            title: Text(
-              APP_NAME_STRING,
-              style: TextStyle(
-                fontFamily: 'Baloo2',
-              ),
-            ),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => _startAddNewTransaction(context))
-            ],
-          );
+        ? _cupertinoNavigationBarBuilder()
+        : _materialNavigationBarBuilder();
 
     final pageBody = SafeArea(
         child: SingleChildScrollView(

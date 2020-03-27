@@ -7,16 +7,43 @@ import '../widgets/adaptive_flat_button.dart';
 class NewTransactionWidget extends StatefulWidget {
   final Function addTransactionHandler;
 
-  NewTransactionWidget({this.addTransactionHandler});
+  NewTransactionWidget({this.addTransactionHandler}) {
+    //print('Constructor NewTransactionWidget');
+  }
 
   @override
-  _NewTransactionWidgetState createState() => _NewTransactionWidgetState();
+  _NewTransactionWidgetState createState() {
+    //print('createState NewTransactionWidget');
+    return _NewTransactionWidgetState();
+  }
 }
 
 class _NewTransactionWidgetState extends State<NewTransactionWidget> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime _userSelectedDatetime;
+
+  _NewTransactionWidgetState() {
+    //print('Constructor _NewTransactionWidgetState');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //print('initState() _NewTransactionWidgetState');
+  }
+
+  @override
+  void didUpdateWidget(NewTransactionWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    //print('didUpdateWidget() _NewTransactionWidgetState');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    //print('dispose() _NewTransactionWidgetState');
+  }
 
   void _submitData() {
     if (_amountController.text.isEmpty) return;
@@ -56,6 +83,7 @@ class _NewTransactionWidgetState extends State<NewTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('build() NewTransactionWidget');
     final themeCtx = Theme.of(context);
     final mediaQryCtx = MediaQuery.of(context);
 

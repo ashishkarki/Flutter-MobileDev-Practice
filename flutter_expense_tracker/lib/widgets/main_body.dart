@@ -9,7 +9,9 @@ class MainBodyWidget extends StatefulWidget {
   final PreferredSizeWidget myAppBar;
   final List<TransactionModel> _userTxnList;
 
-  MainBodyWidget(this.myAppBar, this._userTxnList);
+  MainBodyWidget(this.myAppBar, this._userTxnList) {
+    print('Constructor MainBodyWidget');
+  }
 
   @override
   _MainBodyWidgetState createState() => _MainBodyWidgetState();
@@ -34,8 +36,29 @@ class _MainBodyWidgetState extends State<MainBodyWidget> {
     });
   }
 
+  Widget _landscapeContentBuilder(ThemeData themeCtx) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Show Chart',
+          style: themeCtx.textTheme.title,
+        ),
+        Switch.adaptive(
+            // makes this switch adapt based on ios or android
+            value: _showChart,
+            onChanged: (newVal) {
+              setState(() {
+                _showChart = newVal;
+              });
+            }),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('build() _MainBodyWidgetState');
     final themeCtx = Theme.of(context);
     final mediaQryCtx = MediaQuery.of(context);
     final isLandscapeMode = mediaQryCtx.orientation == Orientation.landscape;
@@ -58,30 +81,14 @@ class _MainBodyWidgetState extends State<MainBodyWidget> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        if (isLandscapeMode)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Show Chart',
-                style: themeCtx.textTheme.title,
-              ),
-              Switch.adaptive(
-                  // makes this switch adapt based on ios or android
-                  value: _showChart,
-                  onChanged: (newVal) {
-                    setState(() {
-                      _showChart = newVal;
-                    });
-                  }),
-            ],
-          ),
-        if (!isLandscapeMode) chartWidgetExpression,
-        if (!isLandscapeMode) txWidgetExpression,
-        if (isLandscapeMode)
-          _showChart
-              ? chartWidgetExpression // chart widget
-              : txWidgetExpression,
+        if (isLandscapeMode) ...[
+          _landscapeContentBuilder(themeCtx),
+          _showChart ? chartWidgetExpression : txWidgetExpression,
+        ],
+        if (!isLandscapeMode) ...[chartWidgetExpression, txWidgetExpression],
+        //if (!isLandscapeMode) txWidgetExpression,
+        // if (isLandscapeMode)
+        //   _showChart ? chartWidgetExpression : txWidgetExpression,
       ],
     );
   }
