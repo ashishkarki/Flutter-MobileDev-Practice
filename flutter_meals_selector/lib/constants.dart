@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 const APP_NAME_STRING = 'Deli Meals Selector';
 
+const CATEGORY_ITEM_BORDER_RADIUS = 25.0;
+
 final mainAppTextThemeObject = //Theme.of(context).textTheme.copyWith(
     ThemeData.light().textTheme.copyWith(
           body1: TextStyle(
