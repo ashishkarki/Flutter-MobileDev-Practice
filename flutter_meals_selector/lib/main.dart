@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './widgets/categories_screen.dart';
 import './constants.dart';
-import './widgets/home-page.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,10 +10,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: APP_NAME_STRING,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePageWidget(),
+      theme: mainAppThemeObject,
+      home: CategoriesScreenWidget(),
     );
   }
 }
