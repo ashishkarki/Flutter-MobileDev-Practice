@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../screens/meal_detail_screen.dart';
 import '../models/meal.dart';
 import '../data/constants.dart';
 
 class MealItemWidget extends StatelessWidget {
+  final String mealId;
   final String title;
   final String imageUrl;
   final int duration;
@@ -11,6 +13,7 @@ class MealItemWidget extends StatelessWidget {
   final Meal_Affordability affordability;
 
   MealItemWidget({
+    @required this.mealId,
     @required this.title,
     @required this.imageUrl,
     @required this.duration,
@@ -18,7 +21,12 @@ class MealItemWidget extends StatelessWidget {
     @required this.affordability,
   });
 
-  void showMealDetails() {}
+  void showMealDetails(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(MealDetailScreenWidget().routeName, arguments: {
+      'mealId': mealId,
+    });
+  }
 
   Row imageCaptionExpression(String infoToDisplay, IconData iconToDisplay) {
     return Row(
@@ -39,7 +47,7 @@ class MealItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: showMealDetails,
+      onTap: () => showMealDetails(context),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(CATEGORY_ITEM_BORDER_RADIUS),
