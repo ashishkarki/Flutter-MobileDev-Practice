@@ -16,7 +16,7 @@ final mainAppTextThemeObject = //Theme.of(context).textTheme.copyWith(
             color: const Color.fromRGBO(20, 51, 51, 1),
           ),
           title: TextStyle(
-            fontSize: 20,
+            fontSize: 22,
             fontFamily: 'Baloo2',
             fontWeight: FontWeight.bold,
           ),
