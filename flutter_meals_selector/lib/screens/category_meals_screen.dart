@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/route-rules-interface.dart';
+import '../data/dummy_data.dart';
+import '../interfaces/route-rules-interface.dart';
 
 class CategoryMealsScreenWidget extends StatelessWidget
     implements RouteRulesInterface {
@@ -17,15 +18,20 @@ class CategoryMealsScreenWidget extends StatelessWidget
     final modalRte = ModalRoute.of(context);
     final routeArgs = modalRte.settings.arguments as Map<String, String>;
     final categoryTitle = routeArgs['title'];
-    final categoryId = routeArgs['id'];
+    final categoryIdofCurrentMeals = routeArgs['id'];
+    final mealsWithinCategories = DUMMY_MEALS.where((meal) {
+      return meal.categoryIds.contains(categoryIdofCurrentMeals);
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryTitle),
       ),
       body: ListView.builder(
-        itemBuilder: (context, index) {},
-        itemCount: 1,
+        itemBuilder: (context, index) {
+          return Text(mealsWithinCategories[index].title);
+        },
+        itemCount: mealsWithinCategories.length,
       ),
     );
   }
