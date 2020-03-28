@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/meal_item.dart';
 import '../data/dummy_data.dart';
 import '../interfaces/route-rules-interface.dart';
 
@@ -29,7 +30,13 @@ class CategoryMealsScreenWidget extends StatelessWidget
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {
-          return Text(mealsWithinCategories[index].title);
+          return MealItemWidget(
+            title: mealsWithinCategories[index].title,
+            imageUrl: mealsWithinCategories[index].imageUrl,
+            duration: mealsWithinCategories[index].duration,
+            affordability: mealsWithinCategories[index].affordability,
+            complexity: mealsWithinCategories[index].complexity,
+          );
         },
         itemCount: mealsWithinCategories.length,
       ),
