@@ -6,10 +6,36 @@ enum Meal_Complexity {
   Hard,
 }
 
+String getComplexityText(complexity) {
+  switch (complexity) {
+    case Meal_Complexity.Challenging:
+      return 'Challenging';
+    case Meal_Complexity.Hard:
+      return 'Hard';
+    case Meal_Complexity.Simple:
+      return 'Simple';
+    default:
+      return 'Bad Meal choice';
+  }
+}
+
 enum Meal_Affordability {
   Affordable,
   Pricey,
   Luxurious,
+}
+
+String getAffordabilityText(affordability) {
+  switch (affordability) {
+    case Meal_Affordability.Affordable:
+      return 'Affordable';
+    case Meal_Affordability.Luxurious:
+      return 'Luxurious';
+    case Meal_Affordability.Pricey:
+      return 'Pricey';
+    default:
+      return 'Bad Meal choice';
+  }
 }
 
 class Meal {
