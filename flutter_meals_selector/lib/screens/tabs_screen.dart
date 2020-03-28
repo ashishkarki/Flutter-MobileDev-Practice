@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../screens/categories_screen.dart';
-import 'favorites_screen.dart';
+import './categories_screen.dart';
+import './favorites_screen.dart';
 
 class TabScreenWidget extends StatefulWidget {
   @override
@@ -9,43 +9,53 @@ class TabScreenWidget extends StatefulWidget {
 }
 
 class _TabScreenWidgetState extends State<TabScreenWidget> {
+  final List<Map<String, Object>> _pages = [
+    {
+      'page': CategoriesScreenWidget(),
+      'title': 'Categories',
+    },
+    {
+      'page': FavoritesScreenWidget(),
+      'title': 'Favorites',
+    },
+  ];
+
+  int _selectedTabIndex = 0;
+
+  void _selectPage(int tabIndex) {
+    setState(() {
+      _selectedTabIndex = tabIndex;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      initialIndex: 0, // which tab to select initially
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Meals'),
-          bottom: TabBar(
-            labelColor: Colors.pink,
-            labelStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              fontFamily: 'RobotoCondensed',
-            ),
-            indicator: BoxDecoration(
-              color: Colors.purple,
-              shape: BoxShape.rectangle,
-            ),
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.category),
-                text: 'Categories',
-              ),
-              Tab(
-                icon: Icon(Icons.star),
-                text: 'Favorites',
-              ),
-            ],
+    final themeCtx = Theme.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_pages[_selectedTabIndex]['title']),
+      ),
+      body: _pages[_selectedTabIndex]['page'],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _selectPage,
+        backgroundColor: themeCtx.primaryColor,
+        unselectedItemColor: Colors.red,
+        selectedItemColor: themeCtx.accentColor,
+        currentIndex: _selectedTabIndex,
+        type: BottomNavigationBarType.shifting,
+        items: [
+          BottomNavigationBarItem(
+            backgroundColor: themeCtx.primaryColor,
+            icon: Icon(Icons.category),
+            title: Text('Categories'),
           ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            CategoriesScreenWidget(),
-            FavoritesScreenWidget(),
-          ],
-        ),
+          BottomNavigationBarItem(
+            backgroundColor: themeCtx.primaryColor,
+            icon: Icon(Icons.star),
+            title: Text('Favorites'),
+          )
+        ],
       ),
     );
   }
