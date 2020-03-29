@@ -4,6 +4,8 @@ import 'package:flutter_meals_selector/interfaces/route-rules-interface.dart';
 
 class MealDetailScreenWidget extends StatelessWidget
     implements RouteRulesInterface {
+  const MealDetailScreenWidget();
+
   @override
   String get routeName => 'meal-detail';
 

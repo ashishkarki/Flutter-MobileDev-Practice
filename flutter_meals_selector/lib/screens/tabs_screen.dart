@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meals_selector/interfaces/route-rules-interface.dart';
 
+import '../widgets/main_drawer.dart';
 import './categories_screen.dart';
 import './favorites_screen.dart';
 
-class TabScreenWidget extends StatefulWidget {
+class TabScreenWidget extends StatefulWidget implements RouteRulesInterface {
+  const TabScreenWidget();
+
+  @override
+  String get routeName => '/'; // this is the root '/'
+
   @override
   _TabScreenWidgetState createState() => _TabScreenWidgetState();
 }
@@ -36,6 +43,7 @@ class _TabScreenWidgetState extends State<TabScreenWidget> {
       appBar: AppBar(
         title: Text(_pages[_selectedTabIndex]['title']),
       ),
+      drawer: MainDrawerWidget(),
       body: _pages[_selectedTabIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
