@@ -26,6 +26,7 @@ class _MyAppState extends State<MyApp> {
   };
 
   List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoriteMeals = [];
 
   void _setFilters(Map<String, bool> filterData) {
     setState(() {
@@ -47,6 +48,25 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _toggleFavorite(String mealId) {
+    final existingIndex =
+        _favoriteMeals.indexWhere((favorite) => favorite.mealId == mealId);
+    if (existingIndex >= 0) {
+      setState(() {
+        _favoriteMeals.removeAt(existingIndex);
+      });
+    } else {
+      setState(() {
+        _favoriteMeals
+            .add(DUMMY_MEALS.firstWhere((meal) => meal.mealId == mealId));
+      });
+    }
+  }
+
+  bool _isMealFavorite(String mealId) {
+    return _favoriteMeals.any((favMeal) => favMeal.mealId == mealId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -55,13 +75,14 @@ class _MyAppState extends State<MyApp> {
       // home: CategoriesScreenWidget(),
       initialRoute: '/', //can ignore since '/' is default initial route
       routes: {
-        const TabScreenWidget().routeName: (ctx) => const TabScreenWidget(),
+        TabScreenWidget().routeName: (ctx) =>
+            TabScreenWidget.withFavorites(_favoriteMeals),
         const CategoriesScreenWidget().routeName: (ctx) =>
             const CategoriesScreenWidget(),
         CategoryMealsScreenWidget().routeName: (ctx) =>
             CategoryMealsScreenWidget.withMeals(_availableMeals),
-        const MealDetailScreenWidget().routeName: (ctx) =>
-            const MealDetailScreenWidget(),
+        MealDetailScreenWidget().routeName: (ctx) =>
+            MealDetailScreenWidget.withToggle(_toggleFavorite, _isMealFavorite),
         FiltersScreenWidget().routeName: (ctx) =>
             FiltersScreenWidget.withFilters(
                 currentFilters: _filters, setFilters: _setFilters),
