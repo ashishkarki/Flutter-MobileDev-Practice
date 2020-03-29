@@ -48,6 +48,8 @@ class MealDetailScreenWidget extends StatelessWidget
     final themeCtx = Theme.of(context);
     // final mediaQryCtx = MediaQuery.of(context);
     final modelRte = ModalRoute.of(context);
+    final navCtx = Navigator.of(context);
+
     final selectedMealId = (modelRte.settings.arguments as Map)['mealId'];
     final selectedMeal =
         DUMMY_MEALS.firstWhere((meal) => meal.mealId == selectedMealId);
@@ -104,6 +106,17 @@ class MealDetailScreenWidget extends StatelessWidget
               ),
             )
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (navCtx.canPop()) {
+            //removes this screen from the stack and goes to previous screen
+            navCtx.pop(selectedMealId);
+          }
+        },
+        child: Icon(
+          Icons.delete,
         ),
       ),
     );
