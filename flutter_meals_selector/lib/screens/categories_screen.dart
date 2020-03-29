@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meals_selector/interfaces/route-rules-interface.dart';
 
 import '../widgets/category_item.dart';
 
 import '../data/dummy_data.dart';
 
-class CategoriesScreenWidget extends StatelessWidget {
+class CategoriesScreenWidget extends StatelessWidget
+    implements RouteRulesInterface {
+  const CategoriesScreenWidget();
+
   @override
   Widget build(BuildContext context) {
     return GridView(
@@ -27,4 +31,7 @@ class CategoriesScreenWidget extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  String get routeName => '/categories-screen';
 }

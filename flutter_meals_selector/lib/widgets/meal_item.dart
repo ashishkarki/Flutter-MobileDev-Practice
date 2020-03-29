@@ -11,6 +11,7 @@ class MealItemWidget extends StatelessWidget {
   final int duration;
   final Meal_Complexity complexity;
   final Meal_Affordability affordability;
+  final Function removeItemFromMealList;
 
   MealItemWidget({
     @required this.mealId,
@@ -19,13 +20,16 @@ class MealItemWidget extends StatelessWidget {
     @required this.duration,
     @required this.complexity,
     @required this.affordability,
+    @required this.removeItemFromMealList,
   });
 
   void showMealDetails(BuildContext context) {
     Navigator.of(context)
-        .pushNamed(MealDetailScreenWidget().routeName, arguments: {
+        .pushNamed(const MealDetailScreenWidget().routeName, arguments: {
       'mealId': mealId,
-    });
+    }).then((result) => {
+              if (result != null) {removeItemFromMealList(result)}
+            });
   }
 
   Row imageCaptionExpression(String infoToDisplay, IconData iconToDisplay) {
