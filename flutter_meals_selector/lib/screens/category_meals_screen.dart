@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../models/meal.dart';
 import '../widgets/meal_item.dart';
-import '../data/dummy_data.dart';
 import '../interfaces/route-rules-interface.dart';
 
 class CategoryMealsScreenWidget extends StatefulWidget
     implements RouteRulesInterface {
-  const CategoryMealsScreenWidget();
+  List<Meal> _availableMeals;
+
+  CategoryMealsScreenWidget();
+
+  CategoryMealsScreenWidget.withMeals(this._availableMeals);
 
   @override
   String get routeName => '/categories-meals';
@@ -41,7 +44,7 @@ class _CategoryMealsScreenWidgetState extends State<CategoryMealsScreenWidget> {
       final routeArgs = modalRte.settings.arguments as Map<String, String>;
       categoryTitle = routeArgs['title'];
       final categoryIdofCurrentMeals = routeArgs['id'];
-      mealsWithinCategories = DUMMY_MEALS.where((meal) {
+      mealsWithinCategories = widget._availableMeals.where((meal) {
         return meal.categoryIds.contains(categoryIdofCurrentMeals);
       }).toList();
 

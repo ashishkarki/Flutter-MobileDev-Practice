@@ -55,7 +55,7 @@ class MainDrawerWidget extends StatelessWidget {
             navCtx.pushReplacementNamed(const TabScreenWidget().routeName);
           }),
           buildListTileForDrawer('Filters', Icons.settings, () {
-            navCtx.pushReplacementNamed(const FiltersScreenWidget().routeName);
+            navCtx.pushReplacementNamed(FiltersScreenWidget().routeName);
           }),
         ],
       ),
