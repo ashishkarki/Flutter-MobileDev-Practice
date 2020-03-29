@@ -52,7 +52,7 @@ class MainDrawerWidget extends StatelessWidget {
             height: 20,
           ),
           buildListTileForDrawer('Meals', Icons.restaurant, () {
-            navCtx.pushReplacementNamed(const TabScreenWidget().routeName);
+            navCtx.pushReplacementNamed(TabScreenWidget().routeName);
           }),
           buildListTileForDrawer('Filters', Icons.settings, () {
             navCtx.pushReplacementNamed(FiltersScreenWidget().routeName);

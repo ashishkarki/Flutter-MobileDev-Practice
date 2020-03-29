@@ -4,7 +4,12 @@ import 'package:flutter_meals_selector/interfaces/route-rules-interface.dart';
 
 class MealDetailScreenWidget extends StatelessWidget
     implements RouteRulesInterface {
-  const MealDetailScreenWidget();
+  Function _toggleFavorite;
+  Function _isMealFavorite;
+
+  MealDetailScreenWidget();
+
+  MealDetailScreenWidget.withToggle(this._toggleFavorite, this._isMealFavorite);
 
   @override
   String get routeName => 'meal-detail';
@@ -109,14 +114,9 @@ class MealDetailScreenWidget extends StatelessWidget
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (navCtx.canPop()) {
-            //removes this screen from the stack and goes to previous screen
-            navCtx.pop(selectedMealId);
-          }
-        },
+        onPressed: () => _toggleFavorite(selectedMealId),
         child: Icon(
-          Icons.delete,
+          _isMealFavorite(selectedMealId) ? Icons.star : Icons.star_border,
         ),
       ),
     );

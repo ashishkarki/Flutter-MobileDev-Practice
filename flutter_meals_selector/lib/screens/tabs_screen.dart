@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_meals_selector/interfaces/route-rules-interface.dart';
 
+import '../interfaces/route-rules-interface.dart';
+import '../models/meal.dart';
 import '../widgets/main_drawer.dart';
 import './categories_screen.dart';
 import './favorites_screen.dart';
 
 class TabScreenWidget extends StatefulWidget implements RouteRulesInterface {
-  const TabScreenWidget();
+  List<Meal> _favoriteMeals;
+
+  TabScreenWidget();
+  TabScreenWidget.withFavorites(this._favoriteMeals);
 
   @override
   String get routeName => '/'; // this is the root '/'
@@ -16,18 +20,25 @@ class TabScreenWidget extends StatefulWidget implements RouteRulesInterface {
 }
 
 class _TabScreenWidgetState extends State<TabScreenWidget> {
-  final List<Map<String, Object>> _pages = [
-    {
-      'page': CategoriesScreenWidget(),
-      'title': 'Categories',
-    },
-    {
-      'page': FavoritesScreenWidget(),
-      'title': 'Favorites',
-    },
-  ];
+  List<Map<String, Object>> _pages;
 
   int _selectedTabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pages = [
+      {
+        'page': CategoriesScreenWidget(),
+        'title': 'Categories',
+      },
+      {
+        'page': FavoritesScreenWidget(widget._favoriteMeals),
+        'title': 'Favorites',
+      },
+    ];
+  }
 
   void _selectPage(int tabIndex) {
     setState(() {
