@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 import '../interfaces/route-rules-interface.dart';
 import '../widgets/main_drawer.dart';
@@ -68,6 +69,21 @@ class _FiltersScreenWidgetState extends State<FiltersScreenWidget> {
               };
 
               widget.setFilters(_selectedFilters);
+
+              // new logic
+              Toast.show(
+                "FILTERs have been SAVED.",
+                context,
+                duration: Toast.LENGTH_SHORT,
+                gravity: Toast.CENTER,
+                textColor: themeCtx.accentColor,
+                backgroundColor: Colors.black54,
+                border: Border.all(
+                  color: themeCtx.primaryColorDark,
+                  width: 3,
+                  style: BorderStyle.solid,
+                ),
+              );
             },
           ),
         ],
