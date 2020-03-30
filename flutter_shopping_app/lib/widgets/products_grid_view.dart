@@ -13,14 +13,12 @@ class ProductsGridViewWidget extends StatelessWidget {
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: loadedProducts.length,
-      itemBuilder: (ctx, itemIndex) => ChangeNotifierProvider(
-        create: (ctx) => loadedProducts[itemIndex],
-        child: ProductItem(
-            // loadedProducts[itemIndex].id,
-            // loadedProducts[itemIndex].title,
-            // loadedProducts[itemIndex].imageUrl,
-            // loadedProducts[itemIndex].price,
-            ),
+      itemBuilder: (ctx, itemIndex) => ChangeNotifierProvider.value(
+        // .value pattern is the way to go for GridView's
+        value: loadedProducts[itemIndex],
+        // ChangeNotifierProvider(
+        //   create: (ctx) => loadedProducts[itemIndex],
+        child: ProductItem(),
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

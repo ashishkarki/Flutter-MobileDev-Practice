@@ -6,18 +6,6 @@ import '../screens/product_detail_screen.dart';
 import '../constants.dart';
 
 class ProductItem extends StatelessWidget {
-  // final String productId;
-  // final String productTitle;
-  // final String productImageUrl;
-  // final double productPrice;
-
-  // const ProductItem(
-  //   this.productId,
-  //   this.productTitle,
-  //   this.productImageUrl,
-  //   this.productPrice,
-  // );
-
   @override
   Widget build(BuildContext context) {
     final themeCtx = Theme.of(context);
