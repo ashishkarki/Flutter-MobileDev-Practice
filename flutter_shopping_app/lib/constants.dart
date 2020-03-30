@@ -1,6 +1,13 @@
-import 'models/product.dart';
+import './providers/product.dart';
 
 const APP_NAME_STRING = 'My Shopping App';
+
+const CURRENCY_SYMBOL = '\$';
+
+enum FilterOptions {
+  Favorites,
+  All,
+}
 
 final dummyProducts = [
   Product(
