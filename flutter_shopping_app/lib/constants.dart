@@ -2,6 +2,8 @@ import 'models/product.dart';
 
 const APP_NAME_STRING = 'My Shopping App';
 
+const CURRENCY_SYMBOL = '\$';
+
 final dummyProducts = [
   Product(
     id: 'p1',

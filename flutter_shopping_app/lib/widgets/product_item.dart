@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../screens/product_detail_screen.dart';
+import '../constants.dart';
 
 class ProductItem extends StatelessWidget {
   final String productId;
   final String productTitle;
   final String productImageUrl;
+  final double productPrice;
 
   const ProductItem(
     this.productId,
     this.productTitle,
     this.productImageUrl,
+    this.productPrice,
   );
 
   @override
@@ -34,9 +37,9 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         header: Text(
-          'some header',
+          '$CURRENCY_SYMBOL${productPrice.toStringAsFixed(2)}',
           style: TextStyle(
-            color: Colors.lime,
+            color: themeCtx.accentColor,
           ),
         ),
         footer: GridTileBar(
