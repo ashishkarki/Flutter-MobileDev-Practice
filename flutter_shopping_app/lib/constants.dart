@@ -1,4 +1,4 @@
-import 'models/product.dart';
+import './providers/product.dart';
 
 const APP_NAME_STRING = 'My Shopping App';
 
