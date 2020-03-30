@@ -24,12 +24,14 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => ProductDetailScreen(
-                        productTitle,
-                      )),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //       builder: (context) => ProductDetailScreen(
+            //             productTitle,
+            //           )),
+            // );
+            Navigator.of(context).pushNamed(ProductDetailScreen.routeName,
+                arguments: {'productTitle': productTitle});
           },
           child: Image.network(
             this.productImageUrl,
