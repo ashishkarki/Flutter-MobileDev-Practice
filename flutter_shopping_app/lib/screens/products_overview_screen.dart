@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../providers/products_provider.dart';
 import '../widgets/products_grid_view.dart';
 import '../constants.dart';
 
-class ProductsOverScreen extends StatelessWidget {
+class ProductsOverScreen extends StatefulWidget {
+  @override
+  _ProductsOverScreenState createState() => _ProductsOverScreenState();
+}
+
+class _ProductsOverScreenState extends State<ProductsOverScreen> {
+  var _showOnlyFavorites = false;
+
   @override
   Widget build(BuildContext context) {
-    final productsContainer = Provider.of<Products>(
-      context,
-      listen: false,
-    );
+    // final productsContainer = Provider.of<Products>(
+    //   context,
+    //   listen: false,
+    // );
 
     return Scaffold(
       appBar: AppBar(
@@ -19,11 +24,15 @@ class ProductsOverScreen extends StatelessWidget {
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
-              if (selectedValue == FilterOptions.Favorites) {
-                productsContainer.showFavoritesOnly();
-              } else {
-                productsContainer.showAll();
-              }
+              setState(() {
+                if (selectedValue == FilterOptions.Favorites) {
+                  // productsContainer.showFavoritesOnly();
+                  _showOnlyFavorites = true;
+                } else {
+                  // productsContainer.showAll();
+                  _showOnlyFavorites = false;
+                }
+              });
             },
             icon: Icon(
               Icons.more_vert,
@@ -41,7 +50,7 @@ class ProductsOverScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ProductsGridViewWidget(),
+      body: ProductsGridViewWidget(_showOnlyFavorites),
     );
   }
 }
