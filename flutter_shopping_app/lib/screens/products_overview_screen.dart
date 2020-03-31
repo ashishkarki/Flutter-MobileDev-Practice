@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../widgets/app_drawer.dart';
+import '../screens/cart_screen.dart';
+import '../providers/cart_provider.dart';
 import '../widgets/products_grid_view.dart';
 import '../constants.dart';
+import '../widgets/badge.dart';
 
-class ProductsOverScreen extends StatefulWidget {
+class ProductsOverviewScreen extends StatefulWidget {
+  static final routeName = '/products-overview';
+
   @override
-  _ProductsOverScreenState createState() => _ProductsOverScreenState();
+  _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
 }
 
-class _ProductsOverScreenState extends State<ProductsOverScreen> {
+class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
 
   @override
   Widget build(BuildContext context) {
-    // final productsContainer = Provider.of<Products>(
-    //   context,
-    //   listen: false,
-    // );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(APP_NAME_STRING),
@@ -48,8 +50,22 @@ class _ProductsOverScreenState extends State<ProductsOverScreen> {
               ),
             ],
           ),
+          Consumer<CartProvider>(
+            builder: (ctx, cart, consumerChild) => Badge(
+              child: consumerChild,
+              value: cart.itemCount.toString(),
+            ),
+            child: IconButton(
+              // this child is passed  to Consumer as consumerChild argument above
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
+            ),
+          ),
         ],
       ),
+      drawer: AppDrawerWidget(),
       body: ProductsGridViewWidget(_showOnlyFavorites),
     );
   }
