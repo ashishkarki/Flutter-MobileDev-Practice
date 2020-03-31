@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import './product.dart';
 
-class Products with ChangeNotifier {
+class ProductsProvider with ChangeNotifier {
   List<Product> _items = dummyProducts;
 
   // var _showFavoritesOnly = false;

@@ -8,7 +8,7 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsData = Provider.of<Products>(
+    final productsData = Provider.of<ProductsProvider>(
       context,
       listen: false, // don't re-run build method when provider's data changes
     );
