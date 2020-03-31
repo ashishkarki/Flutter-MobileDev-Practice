@@ -5,6 +5,7 @@ import '../screens/orders_screen.dart';
 class AppDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final navCtx = Navigator.of(context);
     return Drawer(
       child: Column(
         children: <Widget>[
@@ -17,7 +18,7 @@ class AppDrawerWidget extends StatelessWidget {
             leading: Icon(Icons.shop),
             title: Text('Shop'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
+              navCtx.pushReplacementNamed('/');
             },
           ),
           Divider(),
@@ -25,7 +26,7 @@ class AppDrawerWidget extends StatelessWidget {
             leading: Icon(Icons.payment),
             title: Text('Orders'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(
+              navCtx.pushReplacementNamed(
                 OrdersScreen.routeName,
               );
             },
