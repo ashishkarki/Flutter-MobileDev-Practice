@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CartItem extends StatelessWidget {
+class CartItemWidget extends StatelessWidget {
   final String id;
   final double price;
   final int quantity;
   final String title;
 
-  CartItem({this.id, this.title, this.price, this.quantity});
+  CartItemWidget({this.id, this.title, this.price, this.quantity});
 
   @override
   Widget build(BuildContext context) {

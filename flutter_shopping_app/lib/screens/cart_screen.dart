@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart' show CartProvider;
 import '../widgets/cart_item.dart';
+import '../providers/orders_provider.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -40,7 +41,16 @@ class CartScreen extends StatelessWidget {
                     backgroundColor: themeData.backgroundColor,
                   ),
                   FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<OrdersProvider>(
+                        context,
+                        listen: false,
+                      ).addOrder(
+                        cartProvider.items.values.toList(),
+                        cartProvider.totalAmount,
+                      );
+                      cartProvider.clear();
+                    },
                     child: const Text(
                       'Place Order',
                     ),
@@ -58,7 +68,7 @@ class CartScreen extends StatelessWidget {
               itemBuilder: (ctx, itemIdx) {
                 final cartItem = cartProvider.items.values.toList()[itemIdx];
 
-                return CartItem(
+                return CartItemWidget(
                   id: cartItem.id,
                   quantity: cartItem.quantity,
                   price: cartItem.price,
