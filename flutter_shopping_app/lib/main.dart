@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           value: Products(),
         ),
         ChangeNotifierProvider.value(
-          value: Cart(),
+          value: CartProvider(),
         ),
       ],
       child: MaterialApp(

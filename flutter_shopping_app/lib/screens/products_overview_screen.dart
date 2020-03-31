@@ -47,7 +47,7 @@ class _ProductsOverScreenState extends State<ProductsOverScreen> {
               ),
             ],
           ),
-          Consumer<Cart>(
+          Consumer<CartProvider>(
             builder: (ctx, cart, consumerChild) => Badge(
               child: consumerChild,
               value: cart.itemCount.toString(),
