@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shopping_app/providers/orders_provider.dart';
 import 'package:provider/provider.dart';
 
+import './providers/orders_provider.dart';
+import './screens/orders_screen.dart';
 import './screens/product_detail_screen.dart';
 import './screens/products_overview_screen.dart';
 import './constants.dart';
@@ -33,10 +34,11 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepOrange,
           fontFamily: 'Lato',
         ),
-        home: ProductsOverScreen(),
+        home: ProductsOverviewScreen(),
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
+          OrdersScreen.routeName: (ctx) => OrdersScreen(),
         },
       ),
     );

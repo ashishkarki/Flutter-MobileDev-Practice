@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/app_drawer.dart';
 import '../screens/cart_screen.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/products_grid_view.dart';
 import '../constants.dart';
 import '../widgets/badge.dart';
 
-class ProductsOverScreen extends StatefulWidget {
+class ProductsOverviewScreen extends StatefulWidget {
+  static final routeName = '/products-overview';
+
   @override
-  _ProductsOverScreenState createState() => _ProductsOverScreenState();
+  _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
 }
 
-class _ProductsOverScreenState extends State<ProductsOverScreen> {
+class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
 
   @override
@@ -62,6 +65,7 @@ class _ProductsOverScreenState extends State<ProductsOverScreen> {
           ),
         ],
       ),
+      drawer: AppDrawerWidget(),
       body: ProductsGridViewWidget(_showOnlyFavorites),
     );
   }
