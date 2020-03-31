@@ -15,10 +15,34 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items;
+  Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
     return {..._items};
+  }
+
+  int get itemCount {
+    if (_items == null) {
+      return 0;
+    }
+
+    final totalQuantities = _items.entries.map<int>((mapEntry) {
+      return mapEntry.value.quantity;
+    }).fold<int>(0, (sum, quantity) {
+      return sum + quantity;
+    });
+    // print('totalQuantities::' + totalQuantities.toString());
+
+    return totalQuantities; //_items.length;
+  }
+
+  double get totalAmount {
+    double total = 0.0;
+    _items.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+
+    return total;
   }
 
   void addItem(
@@ -26,7 +50,7 @@ class Cart with ChangeNotifier {
     String title,
     double price,
   ) {
-    if (_items.containsKey(productId)) {
+    if (_items != null && _items.containsKey(productId)) {
       // item already exits, just increase quantity
       _items.update(
         productId,
@@ -48,5 +72,7 @@ class Cart with ChangeNotifier {
         ),
       );
     }
+
+    notifyListeners();
   }
 }
