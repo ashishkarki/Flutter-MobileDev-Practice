@@ -33,7 +33,7 @@ class CartScreen extends StatelessWidget {
                   Spacer(), // takes up all space in between
                   Chip(
                     label: Text(
-                      '\$${cartProvider.totalAmount}',
+                      '\$${cartProvider.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
                         color: themeData.textTheme.title.color,
                       ),
