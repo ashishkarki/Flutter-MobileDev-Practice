@@ -70,6 +70,7 @@ class CartScreen extends StatelessWidget {
 
                 return CartItemWidget(
                   id: cartItem.id,
+                  productId: cartProvider.items.keys.toList()[itemIdx],
                   quantity: cartItem.quantity,
                   price: cartItem.price,
                   title: cartItem.title,
