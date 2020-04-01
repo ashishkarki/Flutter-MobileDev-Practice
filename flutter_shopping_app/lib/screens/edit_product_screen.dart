@@ -19,10 +19,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
     Function onFieldSubmit,
     TextEditingController textEditingController,
     Function onSaved,
+    Function validator,
   }) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: labelText,
+        errorStyle: TextStyle(color: Colors.red),
       ),
       textInputAction:
           textInputAction, // what will the soft keyboard show as next action
@@ -32,6 +34,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       focusNode: focusNode,
       controller: textEditingController,
       onSaved: onSaved,
+      validator: validator,
     );
   }
 
@@ -56,6 +59,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
+      final valStr = _imageUrlController.text.toString();
+      if (valStr.isEmpty &&
+          (!valStr.startsWith('http') || !valStr.startsWith('https')) &&
+          (!valStr.endsWith('.jpg') || !valStr.endsWith('.jpeg'))) {
+        return;
+      }
+
       setState(() {}); // do nothing, just update the state to trigger changes
     }
   }
@@ -71,6 +81,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveForm() {
+    final isFormValid =
+        _form.currentState.validate(); // triggers all validators below
+
+    if (!isFormValid) {
+      return;
+    }
+
     _form.currentState.save();
     print(_editedProduct.title);
     print(_editedProduct.price);
@@ -113,6 +130,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       imageUrl: _editedProduct.imageUrl,
                     );
                   },
+                  validator: (value) {
+                    print('validator in Title with value: $value');
+                    // return null; // means no error
+                    //return 'this is error'; // means an error
+                    if (value.isEmpty) {
+                      return 'Please provide a product Name!!';
+                    }
+                    return null;
+                  },
                 ),
                 _textInputBuilder(
                   labelText: 'Price',
@@ -130,6 +156,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       imageUrl: _editedProduct.imageUrl,
                     );
                   },
+                  validator: (value) {
+                    // return null; // means no error
+                    //return 'this is error'; // means an error
+                    if (value.isEmpty) {
+                      return 'Please provide a product Price!!';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    if (double.parse(value) <= 0.0) {
+                      return 'Please enter a number greater than zero';
+                    }
+                    return null;
+                  },
                 ),
                 _textInputBuilder(
                   labelText: 'Description',
@@ -144,6 +184,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: _editedProduct.price,
                       imageUrl: _editedProduct.imageUrl,
                     );
+                  },
+                  validator: (value) {
+                    // return null; // means no error
+                    //return 'this is error'; // means an error
+                    if (value.isEmpty) {
+                      return 'Please provide a product Description!!';
+                    }
+                    if (value.toString().length < 10) {
+                      return 'Please enter Description longer than 10 charaters';
+                    }
+                    return null;
                   },
                 ),
                 Row(
@@ -190,6 +241,32 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             price: _editedProduct.price,
                             imageUrl: value,
                           );
+                        },
+                        validator: (value) {
+                          // return null; // means no error
+                          //return 'this is error'; // means an error
+                          if (value.isEmpty) {
+                            return 'Please provide a product ImageUrl!!';
+                          }
+                          final valStr = value.toString();
+                          // if (!valStr.startsWith('http') &&
+                          //     !valStr.startsWith('https')) {
+                          //   return 'Please enter a valid URL';
+                          // }
+                          // if (!valStr.endsWith('.png') &&
+                          //     !valStr.endsWith('.jpg') &&
+                          //     !valStr.endsWith('.jpeg')) {
+                          //   return 'Please enter a valid URL';
+                          // }
+                          var urlPattern =
+                              r"(https?|ftp)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+                          var result =
+                              new RegExp(urlPattern, caseSensitive: false)
+                                  .firstMatch(valStr);
+                          if (result == null) {
+                            return 'Please enter a valid image URL';
+                          }
+                          return null;
                         },
                       ),
                     ),
