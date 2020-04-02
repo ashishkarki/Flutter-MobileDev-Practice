@@ -7,7 +7,7 @@ import '../constants.dart';
 import './product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  List<Product> _items = dummyProducts;
+  List<Product> _items = [];
 
   // var _showFavoritesOnly = false;
 
@@ -23,8 +23,37 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((product) => product.id == idToFind);
   }
 
+  Future<void> fetechAndSetProducts() async {
+    const getUrl =
+        FIREBASE_WEB_SERVER_URL + FIREBASE_DB_PRODUCTS_SUFFIX + '.json';
+
+    try {
+      final response = await http.get(getUrl);
+      final jsonBody = json.decode(response.body) as Map<String, dynamic>;
+      final List<Product> productsFromFirebaseDB = [];
+      jsonBody.forEach((prodId, prodMap) {
+        productsFromFirebaseDB.add(
+          Product(
+            id: prodId,
+            title: prodMap['title'],
+            description: prodMap['description'],
+            price: prodMap['price'],
+            imageUrl: prodMap['imageUrl'],
+            isFavorite: prodMap['isFavorite'],
+          ),
+        );
+      });
+
+      _items = productsFromFirebaseDB;
+      notifyListeners();
+    } on Exception catch (error) {
+      throw error;
+    }
+  }
+
   Future<dynamic> addProduct(Product product) async {
-    const postUrl = FIREBASE_WEB_SERVER_URL + '/products';
+    const postUrl =
+        FIREBASE_WEB_SERVER_URL + FIREBASE_DB_PRODUCTS_SUFFIX + '.json';
 
     try {
       final response = await http.post(

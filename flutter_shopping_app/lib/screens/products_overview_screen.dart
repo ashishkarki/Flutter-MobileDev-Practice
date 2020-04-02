@@ -7,6 +7,7 @@ import '../providers/cart_provider.dart';
 import '../widgets/products_grid_view.dart';
 import '../constants.dart';
 import '../widgets/badge.dart';
+import '../providers/products_provider.dart';
 
 class ProductsOverviewScreen extends StatefulWidget {
   static final routeName = '/products-overview';
@@ -17,6 +18,44 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    // Provider.of<ProductsProvider>(context)
+    //     .fetechAndSetProducts(); // WON'T WORK without listen: false
+
+    // One way to workaround the above issue is: (second way is didChangeDependencies())
+    // Future.delayed(Duration.zero).then((_) {
+    //   Provider.of<ProductsProvider>(context).fetechAndSetProducts();
+    // });
+
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Provider.of<ProductsProvider>(context).fetechAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      }).catchError((error) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+
+    _isInit = false;
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +105,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawerWidget(),
-      body: ProductsGridViewWidget(_showOnlyFavorites),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGridViewWidget(_showOnlyFavorites),
     );
   }
 }
