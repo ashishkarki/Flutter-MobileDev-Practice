@@ -23,8 +23,8 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((product) => product.id == idToFind);
   }
 
-  Future<void> addProduct(Product product) {
-    const postUrl = FIREBASE_WEB_SERVER_URL + '/products.json';
+  Future<dynamic> addProduct(Product product) {
+    const postUrl = FIREBASE_WEB_SERVER_URL + '/products';
 
     return http
         .post(
@@ -39,18 +39,26 @@ class ProductsProvider with ChangeNotifier {
         },
       ),
     )
-        .then((response) {
-      final newProduct = Product(
-        id: json.decode(response.body)['name'],
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-      );
+        .then(
+      (response) {
+        final newProduct = Product(
+          id: json.decode(response.body)['name'],
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl,
+        );
 
-      _items.insert(0, newProduct);
+        _items.insert(0, newProduct);
 
-      notifyListeners();
+        notifyListeners();
+
+        // to stay same with catchError throwing Future<dynamic>
+        return Future.value();
+      },
+    ).catchError((error) {
+      print('Error during addProduct: ${error.toString()}');
+      throw error;
     });
   }
 

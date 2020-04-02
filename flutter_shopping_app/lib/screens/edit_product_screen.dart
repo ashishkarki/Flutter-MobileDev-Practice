@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shopping_app/constants.dart';
 import '../providers/products_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -147,7 +148,23 @@ class _EditProductScreenState extends State<EditProductScreen> {
       // means this is a pre-existing, edited product
       productsProvider.updateProduct(_editedProduct.id, _editedProduct);
     } else {
-      productsProvider.addProduct(_editedProduct).then((_) {
+      productsProvider.addProduct(_editedProduct).catchError((error) {
+        return showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: Text(REST_REQUEST_ERROR_TITLE),
+                  content: Text(error.toString()),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Dismiss'),
+                      onPressed: () {
+                        // once this pops, showDialog resolves and returns a Future
+                        Navigator.of(ctx).pop();
+                      },
+                    )
+                  ],
+                ));
+      }).then((_) {
         setState(() {
           _isLoading = false;
         });
