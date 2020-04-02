@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../constants.dart';
 import './product.dart';
+import '../models/http_exception.dart';
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [];
@@ -51,6 +52,27 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
+  String productToJsonEncodedHelper(Product product,
+      {bool updateFavorite = true}) {
+    Map<String, dynamic> mustPart = {
+      'title': product.title,
+      'description': product.description,
+      'price': product.price,
+      'imageUrl': product.imageUrl,
+    };
+
+    if (updateFavorite) {
+      mustPart.addAll(
+        {
+          'isFavorite': product.isFavorite,
+        },
+      );
+    }
+    return json.encode(
+      mustPart,
+    );
+  }
+
   Future<dynamic> addProduct(Product product) async {
     const postUrl =
         FIREBASE_WEB_SERVER_URL + FIREBASE_DB_PRODUCTS_SUFFIX + '.json';
@@ -58,15 +80,7 @@ class ProductsProvider with ChangeNotifier {
     try {
       final response = await http.post(
         postUrl,
-        body: json.encode(
-          {
-            'title': product.title,
-            'description': product.description,
-            'price': product.price,
-            'imageUrl': product.imageUrl,
-            'isFavorite': product.isFavorite,
-          },
-        ),
+        body: productToJsonEncodedHelper(product),
       );
 
       final newProduct = Product(
@@ -96,20 +110,60 @@ class ProductsProvider with ChangeNotifier {
     // });
   }
 
-  void updateProduct(String productIdToBeUpdated, Product updatedProduct) {
+  Future<void> updateProduct(
+      String productIdToBeUpdated, Product updatedProduct) async {
     final toBeUpdatedProductIndex =
         _items.indexWhere((product) => product.id == productIdToBeUpdated);
 
     if (toBeUpdatedProductIndex >= 0) {
       // yes, the product exists
-      _items[toBeUpdatedProductIndex] = updatedProduct;
-      notifyListeners();
+      try {
+        final updateUrl = FIREBASE_WEB_SERVER_URL +
+            FIREBASE_DB_PRODUCTS_SUFFIX +
+            '/$productIdToBeUpdated.json';
+
+        await http.patch(
+          updateUrl,
+          body:
+              productToJsonEncodedHelper(updatedProduct, updateFavorite: false),
+        );
+
+        _items[toBeUpdatedProductIndex] = updatedProduct;
+        notifyListeners();
+      } catch (exception) {
+        throw exception;
+      }
     }
   }
 
-  void deleteProduct(String idToBeDeleted) {
-    _items.removeWhere((product) => product.id == idToBeDeleted);
+  Future<void> deleteProduct(String idToBeDeleted) async {
+    // USING OPTIMISTIC UPDATING: remove from memory first and re-stating if needed
+    final existingProductIndex =
+        _items.indexWhere((product) => product.id == idToBeDeleted);
+    var existingProduct = _items[
+        existingProductIndex]; // we re-instate this if Firebase deletion was unsuccessful
+
+    // now remove the item from list, yet it remains in memory since existingProduct refers to it
+    _items.removeAt(existingProductIndex);
 
     notifyListeners();
+
+    // now send the http delete and see if the request succeds
+    final deleteUrl = FIREBASE_WEB_SERVER_URL +
+        FIREBASE_DB_PRODUCTS_SUFFIX +
+        '/$idToBeDeleted';
+    http.delete(deleteUrl).then((response) {
+      // means the http delete was successful, de-reference existingProduct
+      // http.delete doesn't throw error for error codes (i.e code >= 400),
+      // so, we have to throw error manually
+      if (response.statusCode >= 400) {
+        throw HttpException('Could not delete the product!!');
+      }
+      existingProduct = null;
+    }).catchError((_) {
+      // error using delete request, re-instate the product using existingProduct
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+    });
   }
 }
