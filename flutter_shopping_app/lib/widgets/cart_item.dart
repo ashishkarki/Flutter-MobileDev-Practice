@@ -21,6 +21,7 @@ class CartItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeCtx = Theme.of(context);
+    final navCtx = Navigator.of(context);
 
     return Dismissible(
       key: ValueKey(id),
@@ -30,6 +31,29 @@ class CartItemWidget extends StatelessWidget {
           context,
           listen: false,
         ).removeItem(productId);
+      },
+      confirmDismiss: (directionDimissed) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text('Do you want to remove this item from cart?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  navCtx.pop(false); // pops the alertDialog and return false
+                },
+                child: Text('No'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  navCtx.pop(true);
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        );
       },
       background: Container(
         color: themeCtx.errorColor,
