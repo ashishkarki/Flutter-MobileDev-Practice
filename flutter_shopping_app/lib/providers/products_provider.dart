@@ -140,30 +140,28 @@ class ProductsProvider with ChangeNotifier {
     // USING OPTIMISTIC UPDATING: remove from memory first and re-stating if needed
     final existingProductIndex =
         _items.indexWhere((product) => product.id == idToBeDeleted);
-    var existingProduct = _items[
-        existingProductIndex]; // we re-instate this if Firebase deletion was unsuccessful
-
+    // we re-instate this if Firebase deletion was unsuccessful
+    var existingProduct = _items[existingProductIndex];
     // now remove the item from list, yet it remains in memory since existingProduct refers to it
     _items.removeAt(existingProductIndex);
-
     notifyListeners();
 
     // now send the http delete and see if the request succeds
     final deleteUrl = FIREBASE_WEB_SERVER_URL +
         FIREBASE_DB_PRODUCTS_SUFFIX +
-        '/$idToBeDeleted';
-    http.delete(deleteUrl).then((response) {
-      // means the http delete was successful, de-reference existingProduct
-      // http.delete doesn't throw error for error codes (i.e code >= 400),
-      // so, we have to throw error manually
-      if (response.statusCode >= 400) {
-        throw HttpException('Could not delete the product!!');
-      }
-      existingProduct = null;
-    }).catchError((_) {
+        '/$idToBeDeleted.json';
+    final response = await http.delete(deleteUrl);
+    // means the http delete was successful, de-reference existingProduct
+    // http.delete doesn't throw error for error codes (i.e code >= 400),
+    // so, we have to throw error manually
+    if (response.statusCode >= 400) {
       // error using delete request, re-instate the product using existingProduct
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();
-    });
+
+      throw HttpException('Could not delete the product!!');
+    }
+    // if there is no error, de-reference the deleted, existing product from memory too
+    existingProduct = null;
   }
 }
