@@ -124,7 +124,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isFormValid =
         _form.currentState.validate(); // triggers all validators below
 
@@ -148,30 +148,33 @@ class _EditProductScreenState extends State<EditProductScreen> {
       // means this is a pre-existing, edited product
       productsProvider.updateProduct(_editedProduct.id, _editedProduct);
     } else {
-      productsProvider.addProduct(_editedProduct).catchError((error) {
-        return showDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: Text(REST_REQUEST_ERROR_TITLE),
-                  content: Text(error.toString()),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Dismiss'),
-                      onPressed: () {
-                        // once this pops, showDialog resolves and returns a Future
-                        Navigator.of(ctx).pop();
-                      },
-                    )
-                  ],
-                ));
-      }).then((_) {
+      try {
+        await productsProvider.addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(REST_REQUEST_ERROR_TITLE),
+            content: Text(error.toString()),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Dismiss'),
+                onPressed: () {
+                  // once this pops, showDialog resolves and returns a Future
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
+        );
+      } finally {
         setState(() {
           _isLoading = false;
         });
 
         // once saving is done, go back to products list page
         Navigator.of(context).pop();
-      });
+      }
     }
   }
 

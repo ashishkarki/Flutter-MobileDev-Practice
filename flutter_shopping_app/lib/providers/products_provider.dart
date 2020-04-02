@@ -23,43 +23,48 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((product) => product.id == idToFind);
   }
 
-  Future<dynamic> addProduct(Product product) {
+  Future<dynamic> addProduct(Product product) async {
     const postUrl = FIREBASE_WEB_SERVER_URL + '/products';
 
-    return http
-        .post(
-      postUrl,
-      body: json.encode(
-        {
-          'title': product.title,
-          'description': product.description,
-          'price': product.price,
-          'imageUrl': product.imageUrl,
-          'isFavorite': product.isFavorite,
-        },
-      ),
-    )
-        .then(
-      (response) {
-        final newProduct = Product(
-          id: json.decode(response.body)['name'],
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl,
-        );
+    try {
+      final response = await http.post(
+        postUrl,
+        body: json.encode(
+          {
+            'title': product.title,
+            'description': product.description,
+            'price': product.price,
+            'imageUrl': product.imageUrl,
+            'isFavorite': product.isFavorite,
+          },
+        ),
+      );
 
-        _items.insert(0, newProduct);
+      final newProduct = Product(
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
 
-        notifyListeners();
+      _items.insert(0, newProduct);
 
-        // to stay same with catchError throwing Future<dynamic>
-        return Future.value();
-      },
-    ).catchError((error) {
+      notifyListeners();
+    } catch (error) {
       print('Error during addProduct: ${error.toString()}');
       throw error;
-    });
+    }
+    //   .then(
+    // (response) {
+
+    // to stay same with catchError throwing Future<dynamic>
+    // return Future.value();
+    //   },
+    // ).catchError((error) {
+    //   print('Error during addProduct: ${error.toString()}');
+    //   throw error;
+    // });
   }
 
   void updateProduct(String productIdToBeUpdated, Product updatedProduct) {
