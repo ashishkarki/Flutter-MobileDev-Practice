@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../constants.dart';
 import './product.dart';
@@ -20,18 +23,35 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((product) => product.id == idToFind);
   }
 
-  void addProduct(Product product) {
-    final newProduct = Product(
-      id: DateTime.now().toString(),
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-    );
+  Future<void> addProduct(Product product) {
+    const postUrl = FIREBASE_WEB_SERVER_URL + '/products.json';
 
-    _items.insert(0, newProduct);
+    return http
+        .post(
+      postUrl,
+      body: json.encode(
+        {
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite,
+        },
+      ),
+    )
+        .then((response) {
+      final newProduct = Product(
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
 
-    notifyListeners();
+      _items.insert(0, newProduct);
+
+      notifyListeners();
+    });
   }
 
   void updateProduct(String productIdToBeUpdated, Product updatedProduct) {

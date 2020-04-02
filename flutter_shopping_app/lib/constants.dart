@@ -4,6 +4,8 @@ const APP_NAME_STRING = 'My Shopping App';
 
 const CURRENCY_SYMBOL = '\$';
 
+const FIREBASE_WEB_SERVER_URL = 'https://flutter-update-53d45.firebaseio.com/';
+
 enum FilterOptions {
   Favorites,
   All,
