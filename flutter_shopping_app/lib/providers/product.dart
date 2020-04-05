@@ -1,6 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
-class Product with ChangeNotifier {
+import 'package:flutter/foundation.dart';
+import '../models/http_exception.dart';
+import 'package:http/http.dart' as http;
+
+import '../interfaces/common-interfaces.dart';
+import '../constants.dart';
+
+class Product extends CommonInterfaces with ChangeNotifier {
   final String id;
   final String title;
   final String description;
@@ -17,8 +24,28 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  void toggleFavoriteStatus() {
+  void toggleFavoriteStatusHelper() {
     isFavorite = !isFavorite;
     notifyListeners();
+  }
+
+  Future<void> toggleFavoriteStatus() async {
+    // USING OPTIMISTIC UPDATING:
+    this.toggleFavoriteStatusHelper();
+
+    final updateUrl = FIREBASE_WEB_SERVER_URL +
+        FIREBASE_DB_PRODUCTS_SUFFIX +
+        '/${this.id}.json';
+    final response = await http.patch(
+      updateUrl,
+      body: productToJsonEncodedHelper(this,
+          updateOthers: false, updateFavorite: true),
+    );
+
+    if (response.statusCode >= 400) {
+      toggleFavoriteStatusHelper();
+
+      throw HttpException('Error updating favorite status for this item');
+    }
   }
 }

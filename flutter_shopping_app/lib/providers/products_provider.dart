@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../interfaces/common-interfaces.dart';
 import '../constants.dart';
 import './product.dart';
 import '../models/http_exception.dart';
 
-class ProductsProvider with ChangeNotifier {
+class ProductsProvider extends CommonInterfaces with ChangeNotifier {
   List<Product> _items = [];
 
   // var _showFavoritesOnly = false;
@@ -50,27 +51,6 @@ class ProductsProvider with ChangeNotifier {
     } on Exception catch (error) {
       throw error;
     }
-  }
-
-  String productToJsonEncodedHelper(Product product,
-      {bool updateFavorite = true}) {
-    Map<String, dynamic> mustPart = {
-      'title': product.title,
-      'description': product.description,
-      'price': product.price,
-      'imageUrl': product.imageUrl,
-    };
-
-    if (updateFavorite) {
-      mustPart.addAll(
-        {
-          'isFavorite': product.isFavorite,
-        },
-      );
-    }
-    return json.encode(
-      mustPart,
-    );
   }
 
   Future<dynamic> addProduct(Product product) async {
