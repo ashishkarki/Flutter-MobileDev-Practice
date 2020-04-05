@@ -10,44 +10,64 @@ class OrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ordersProvider = Provider.of<OrdersProvider>(context);
+    // final ordersProvider = Provider.of<OrdersProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Your Orders'),
-      ),
-      drawer: AppDrawerWidget(),
-      body: ordersProvider.orders.length == 0
-          ? Card(
-              child: Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 25,
-                  vertical: 50,
-                ),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.orange,
-                  width: 3,
-                )),
-                child: Card(
-                  elevation: 3,
-                  child: Text(
-                    'No orders yet. Please use the Products Screen to order some.',
-                    style: TextStyle(
-                      color: Colors.orangeAccent,
-                      fontSize: 30,
-                      //backgroundColor: Colors.black45,
-                    ),
-                  ),
-                ),
-              ),
-            )
-          : ListView.builder(
-              itemBuilder: (ctx, itemIdx) => OrderItemWidget(
-                ordersProvider.orders[itemIdx],
-              ),
-              itemCount: ordersProvider.orders.length,
-            ),
-    );
+        appBar: AppBar(
+          title: Text('Your Orders'),
+        ),
+        drawer: AppDrawerWidget(),
+        body: FutureBuilder(
+          builder: (ctx, dataSnapshot) {
+            if (dataSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              if (dataSnapshot.error != null) {
+                return Center(
+                  child: Text('error occurred while fetching your orders'),
+                );
+              } else {
+                return Consumer<OrdersProvider>(
+                  builder: (ctx, ordersProvider, child) =>
+                      ordersProvider.orders.length == 0
+                          ? Card(
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                  vertical: 50,
+                                ),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                  color: Colors.orange,
+                                  width: 3,
+                                )),
+                                child: Card(
+                                  elevation: 3,
+                                  child: Text(
+                                    'No orders yet. Please use the Products Screen to order some.',
+                                    style: TextStyle(
+                                      color: Colors.orangeAccent,
+                                      fontSize: 30,
+                                      //backgroundColor: Colors.black45,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemBuilder: (ctx, itemIdx) => OrderItemWidget(
+                                ordersProvider.orders[itemIdx],
+                              ),
+                              itemCount: ordersProvider.orders.length,
+                            ),
+                );
+              }
+            }
+          },
+          future: Provider.of<OrdersProvider>(context, listen: false)
+              .fetchAndSetOrders(),
+        ));
   }
 }
