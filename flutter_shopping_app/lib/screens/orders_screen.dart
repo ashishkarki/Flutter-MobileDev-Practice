@@ -17,19 +17,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   void initState() {
-    print('_OrdersScreenState init');
-    Future.delayed(Duration.zero).then((_) async {
-      setState(() {
-        _isLoading = true;
-      });
-      // actually with listen: false, we don't need Future.deleyed within init. but, anyways.
-      await Provider.of<OrdersProvider>(context, listen: false)
-          .fetchAndSetOrders();
-
+    //Future.delayed(Duration.zero).then((_) async {
+    //setState(() {
+    _isLoading =
+        true; // setState not needed since init runs before build and sets the state
+    //});
+    // actually with listen: false, we don't need Future.deleyed within init. but, anyways.
+    Provider.of<OrdersProvider>(context, listen: false)
+        .fetchAndSetOrders()
+        .then((_) {
       setState(() {
         _isLoading = false;
       });
     });
+
+    //});
     super.initState();
   }
 
