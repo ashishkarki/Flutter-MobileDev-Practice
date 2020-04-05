@@ -32,6 +32,10 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
     try {
       final response = await http.get(getUrl);
       final jsonBody = json.decode(response.body) as Map<String, dynamic>;
+      if (jsonBody == null) {
+        return;
+      }
+
       final List<Product> productsFromFirebaseDB = [];
       jsonBody.forEach((prodId, prodMap) {
         productsFromFirebaseDB.add(

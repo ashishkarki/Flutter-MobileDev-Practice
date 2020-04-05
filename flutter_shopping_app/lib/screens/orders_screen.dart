@@ -5,8 +5,33 @@ import '../widgets/app_drawer.dart';
 import '../providers/orders_provider.dart';
 import '../widgets/order_item.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   static const routeName = '/orders';
+
+  @override
+  _OrdersScreenState createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    print('_OrdersScreenState init');
+    Future.delayed(Duration.zero).then((_) async {
+      setState(() {
+        _isLoading = true;
+      });
+      // actually with listen: false, we don't need Future.deleyed within init. but, anyways.
+      await Provider.of<OrdersProvider>(context, listen: false)
+          .fetchAndSetOrders();
+
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +67,14 @@ class OrdersScreen extends StatelessWidget {
                 ),
               ),
             )
-          : ListView.builder(
-              itemBuilder: (ctx, itemIdx) => OrderItemWidget(
-                ordersProvider.orders[itemIdx],
-              ),
-              itemCount: ordersProvider.orders.length,
-            ),
+          : _isLoading
+              ? CircularProgressIndicator()
+              : ListView.builder(
+                  itemBuilder: (ctx, itemIdx) => OrderItemWidget(
+                    ordersProvider.orders[itemIdx],
+                  ),
+                  itemCount: ordersProvider.orders.length,
+                ),
     );
   }
 }

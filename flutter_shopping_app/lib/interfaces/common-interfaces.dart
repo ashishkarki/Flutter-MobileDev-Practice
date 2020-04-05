@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../providers/cart_provider.dart';
 import '../providers/product.dart';
 
 class CommonInterfaces {
@@ -23,6 +24,31 @@ class CommonInterfaces {
         },
       );
     }
+    return json.encode(
+      mustPart,
+    );
+  }
+
+  String orderToJsonEncodedHelper(
+    List<CartItemObject> cartProducts,
+    double total,
+    DateTime timestamp,
+  ) {
+    Map<String, dynamic> mustPart = {
+      'amount': total,
+      'dateTime': timestamp.toIso8601String(),
+      'cartProducts': cartProducts
+          .map(
+            (cartProd) => {
+              'id': cartProd.id,
+              'title': cartProd.title,
+              'quantity': cartProd.quantity,
+              'price': cartProd.price,
+            },
+          )
+          .toList(),
+    };
+
     return json.encode(
       mustPart,
     );

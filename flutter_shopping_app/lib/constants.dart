@@ -7,6 +7,7 @@ const CURRENCY_SYMBOL = '\$';
 const FIREBASE_WEB_SERVER_URL = 'https://flutter-update-53d45.firebaseio.com/';
 
 const FIREBASE_DB_PRODUCTS_SUFFIX = '/products';
+const FIREBASE_DB_ORDERS_SUFFIX = '/orders';
 
 const REST_REQUEST_ERROR_TITLE = 'Error occured during REST request';
 

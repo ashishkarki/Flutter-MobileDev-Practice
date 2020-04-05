@@ -40,22 +40,8 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: themeData.backgroundColor,
                   ),
-                  FlatButton(
-                    onPressed: () {
-                      Provider.of<OrdersProvider>(
-                        context,
-                        listen: false,
-                      ).addOrder(
-                        cartProvider.items.values.toList(),
-                        cartProvider.totalAmount,
-                      );
-                      cartProvider.clear();
-                    },
-                    child: const Text(
-                      'Place Order',
-                    ),
-                    textColor: themeData.primaryColor,
-                  ),
+                  PlaceOrderButtonWidget(
+                      cartProvider: cartProvider, themeData: themeData),
                 ],
               ),
             ),
@@ -82,5 +68,55 @@ class CartScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class PlaceOrderButtonWidget extends StatefulWidget {
+  const PlaceOrderButtonWidget({
+    Key key,
+    @required this.cartProvider,
+    @required this.themeData,
+  }) : super(key: key);
+
+  final CartProvider cartProvider;
+  final ThemeData themeData;
+
+  @override
+  _PlaceOrderButtonWidgetState createState() => _PlaceOrderButtonWidgetState();
+}
+
+class _PlaceOrderButtonWidgetState extends State<PlaceOrderButtonWidget> {
+  var _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? CircularProgressIndicator()
+        : FlatButton(
+            onPressed: (widget.cartProvider.totalAmount <= 0 || _isLoading)
+                ? null
+                : () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    await Provider.of<OrdersProvider>(
+                      context,
+                      listen: false,
+                    ).addOrder(
+                      widget.cartProvider.items.values.toList(),
+                      widget.cartProvider.totalAmount,
+                    );
+
+                    setState(() {
+                      _isLoading = false;
+                    });
+
+                    widget.cartProvider.clear();
+                  },
+            child: const Text(
+              'Place Order',
+            ),
+            textColor: widget.themeData.primaryColor,
+          );
   }
 }
