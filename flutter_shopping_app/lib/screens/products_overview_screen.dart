@@ -20,6 +20,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
   var _isInit = true;
   var _isLoading = false;
+  var _isError = false;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     if (_isInit) {
       setState(() {
         _isLoading = true;
+        _isError = false;
       });
 
       Provider.of<ProductsProvider>(context).fetechAndSetProducts().then((_) {
@@ -48,6 +50,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       }).catchError((error) {
         setState(() {
           _isLoading = false;
+          _isError = true;
         });
       });
     }
@@ -109,7 +112,19 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ProductsGridViewWidget(_showOnlyFavorites),
+          : _isError
+              ? Container(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    'Sorry some error occurred. Re-start the app or contact the administrator.',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontStyle: FontStyle.italic,
+                      backgroundColor: Colors.black45,
+                    ),
+                  ),
+                )
+              : ProductsGridViewWidget(_showOnlyFavorites),
     );
   }
 }

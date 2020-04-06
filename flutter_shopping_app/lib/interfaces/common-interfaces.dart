@@ -4,7 +4,7 @@ import '../providers/cart_provider.dart';
 import '../providers/product.dart';
 
 class CommonInterfaces {
-  String productToJsonEncodedHelper(Product product,
+  String productToJsonEncodedHelper(Product product, String userId,
       {bool updateOthers = true, bool updateFavorite = false}) {
     Map<String, dynamic> mustPart = {};
 
@@ -14,16 +14,17 @@ class CommonInterfaces {
         'description': product.description,
         'price': product.price,
         'imageUrl': product.imageUrl,
+        'creatorId': userId
       });
     }
 
-    if (updateFavorite) {
-      mustPart.addAll(
-        {
-          'isFavorite': product.isFavorite,
-        },
-      );
-    }
+    // if (updateFavorite) {
+    //   mustPart.addAll(
+    //     {
+    //       'isFavorite': product.isFavorite,
+    //     },
+    //   );
+    // }
     return json.encode(
       mustPart,
     );
