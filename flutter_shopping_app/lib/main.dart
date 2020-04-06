@@ -13,6 +13,7 @@ import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
 import './providers/auth_provider.dart';
+import './screens/splash_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(
+        ListenableProvider.value(
           value: AuthProvider(),
         ),
         ChangeNotifierProxyProvider<AuthProvider, ProductsProvider>(
@@ -59,7 +60,14 @@ class MyApp extends StatelessWidget {
           ),
           home: authProvider.isAuthenticated
               ? ProductsOverviewScreen()
-              : AuthScreen(),
+              : FutureBuilder(
+                  future: authProvider.tryAutoLogin(),
+                  builder: (ctx, authResultSnapshot) =>
+                      authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
           routes: {
             AuthScreen.routeName: (ctx) => AuthScreen(),
             ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen(),
