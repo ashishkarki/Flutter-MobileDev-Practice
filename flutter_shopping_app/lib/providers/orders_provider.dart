@@ -23,10 +23,18 @@ class OrderItem {
 
 class OrdersProvider extends CommonInterfaces with ChangeNotifier {
   final String authToken;
+  final String userId;
 
-  OrdersProvider.empty({this.authToken});
+  OrdersProvider.empty({
+    this.authToken,
+    this.userId,
+  });
 
-  OrdersProvider.withProxy(this.authToken, this._orders);
+  OrdersProvider.withProxy(
+    this.authToken,
+    this.userId,
+    this._orders,
+  );
 
   List<OrderItem> _orders = [];
 
@@ -41,7 +49,7 @@ class OrdersProvider extends CommonInterfaces with ChangeNotifier {
     final timestamp = DateTime.now();
     final postUrl = FIREBASE_WEB_SERVER_URL +
         FIREBASE_DB_ORDERS_SUFFIX +
-        '.json?auth=$authToken';
+        '/$userId.json?auth=$authToken';
 
     try {
       final response = await http.post(
@@ -72,7 +80,7 @@ class OrdersProvider extends CommonInterfaces with ChangeNotifier {
   Future<void> fetchAndSetOrders() async {
     final getUrl = FIREBASE_WEB_SERVER_URL +
         FIREBASE_DB_ORDERS_SUFFIX +
-        '.json?auth=$authToken';
+        '/$userId.json?auth=$authToken';
 
     final response = await http.get(getUrl);
     final List<OrderItem> loadedOrders = [];
