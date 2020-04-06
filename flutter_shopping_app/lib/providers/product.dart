@@ -29,17 +29,20 @@ class Product extends CommonInterfaces with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavoriteStatus(String authToken) async {
+  Future<void> toggleFavoriteStatus(
+    String authToken,
+    String userId,
+  ) async {
     // USING OPTIMISTIC UPDATING:
     this.toggleFavoriteStatusHelper();
 
     final updateUrl = FIREBASE_WEB_SERVER_URL +
-        FIREBASE_DB_PRODUCTS_SUFFIX +
+        '/userFavorites/$userId' +
+        // FIREBASE_DB_PRODUCTS_SUFFIX +
         '/${this.id}.json?auth=$authToken';
-    final response = await http.patch(
+    final response = await http.put(
       updateUrl,
-      body: productToJsonEncodedHelper(this,
-          updateOthers: false, updateFavorite: true),
+      body: jsonEncode(isFavorite),
     );
 
     if (response.statusCode >= 400) {

@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
           update: (ctx, authProvider, previousProdProvider) =>
               ProductsProvider.withProxy(
             authProvider.token,
+            authProvider.userId,
             previousProdProvider == null ? [] : previousProdProvider.items,
           ),
         ),

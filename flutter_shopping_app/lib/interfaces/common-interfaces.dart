@@ -17,13 +17,13 @@ class CommonInterfaces {
       });
     }
 
-    if (updateFavorite) {
-      mustPart.addAll(
-        {
-          'isFavorite': product.isFavorite,
-        },
-      );
-    }
+    // if (updateFavorite) {
+    //   mustPart.addAll(
+    //     {
+    //       'isFavorite': product.isFavorite,
+    //     },
+    //   );
+    // }
     return json.encode(
       mustPart,
     );

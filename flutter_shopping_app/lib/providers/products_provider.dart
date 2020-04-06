@@ -10,10 +10,11 @@ import '../models/http_exception.dart';
 
 class ProductsProvider extends CommonInterfaces with ChangeNotifier {
   final String authToken;
+  final String userId;
 
-  ProductsProvider.empty({this.authToken});
+  ProductsProvider.empty({this.authToken, this.userId});
 
-  ProductsProvider.withProxy(this.authToken, this._items);
+  ProductsProvider.withProxy(this.authToken, this.userId, this._items);
 
   List<Product> _items = [];
 
@@ -43,6 +44,11 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
         return;
       }
 
+      final favoriteUrl = FIREBASE_WEB_SERVER_URL +
+          '/userFavorites/$userId.json?auth=$authToken';
+      final favoriteResponse = await http.get(favoriteUrl);
+      final favoriteData = jsonDecode(favoriteResponse.body);
+
       final List<Product> productsFromFirebaseDB = [];
       jsonBody.forEach((prodId, prodMap) {
         productsFromFirebaseDB.add(
@@ -52,7 +58,8 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
             description: prodMap['description'],
             price: prodMap['price'],
             imageUrl: prodMap['imageUrl'],
-            isFavorite: prodMap['isFavorite'],
+            isFavorite:
+                favoriteData == null ? false : favoriteData[prodId] ?? false,
           ),
         );
       });
@@ -72,7 +79,7 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
     try {
       final response = await http.post(
         postUrl,
-        body: productToJsonEncodedHelper(product),
+        body: productToJsonEncodedHelper(product, updateFavorite: false),
       );
 
       final newProduct = Product(
