@@ -9,6 +9,12 @@ import './product.dart';
 import '../models/http_exception.dart';
 
 class ProductsProvider extends CommonInterfaces with ChangeNotifier {
+  final String authToken;
+
+  ProductsProvider.empty({this.authToken});
+
+  ProductsProvider.withProxy(this.authToken, this._items);
+
   List<Product> _items = [];
 
   // var _showFavoritesOnly = false;
@@ -26,8 +32,9 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
   }
 
   Future<void> fetechAndSetProducts() async {
-    const getUrl =
-        FIREBASE_WEB_SERVER_URL + FIREBASE_DB_PRODUCTS_SUFFIX + '.json';
+    final getUrl = FIREBASE_WEB_SERVER_URL +
+        FIREBASE_DB_PRODUCTS_SUFFIX +
+        '.json?auth=$authToken';
 
     try {
       final response = await http.get(getUrl);
@@ -58,8 +65,9 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
   }
 
   Future<dynamic> addProduct(Product product) async {
-    const postUrl =
-        FIREBASE_WEB_SERVER_URL + FIREBASE_DB_PRODUCTS_SUFFIX + '.json';
+    final postUrl = FIREBASE_WEB_SERVER_URL +
+        FIREBASE_DB_PRODUCTS_SUFFIX +
+        '.json?auth=$authToken';
 
     try {
       final response = await http.post(
@@ -104,7 +112,7 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
       try {
         final updateUrl = FIREBASE_WEB_SERVER_URL +
             FIREBASE_DB_PRODUCTS_SUFFIX +
-            '/$productIdToBeUpdated.json';
+            '/$productIdToBeUpdated.json?auth=$authToken';
 
         await http.patch(
           updateUrl,
@@ -133,7 +141,7 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
     // now send the http delete and see if the request succeds
     final deleteUrl = FIREBASE_WEB_SERVER_URL +
         FIREBASE_DB_PRODUCTS_SUFFIX +
-        '/$idToBeDeleted.json';
+        '/$idToBeDeleted.json?auth=$authToken';
     final response = await http.delete(deleteUrl);
     // means the http delete was successful, de-reference existingProduct
     // http.delete doesn't throw error for error codes (i.e code >= 400),

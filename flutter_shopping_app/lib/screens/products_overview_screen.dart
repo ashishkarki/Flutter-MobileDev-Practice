@@ -40,7 +40,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     if (_isInit) {
       setState(() {
         _isLoading = true;
-        _isError = true;
+        _isError = false;
       });
 
       Provider.of<ProductsProvider>(context).fetechAndSetProducts().then((_) {

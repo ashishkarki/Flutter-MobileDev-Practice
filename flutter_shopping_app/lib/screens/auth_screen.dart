@@ -1,6 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_shopping_app/screens/products_overview_screen.dart';
+import 'package:provider/provider.dart';
+
+import '../models/http_exception.dart';
+import '../providers/auth_provider.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -99,7 +104,22 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  void _showErrorDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text('Some error occured!!'),
+              content: Text(message),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Dismiss'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ));
+  }
+
+  Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
@@ -108,11 +128,48 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      // Log user in
-    } else {
-      // Sign user up
+
+    final AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    final navState = Navigator.of(context);
+
+    try {
+      if (_authMode == AuthMode.Login) {
+        // Log user in
+        await authProvider.login(
+          _authData['email'],
+          _authData['password'],
+        );
+      } else {
+        // Sign user up
+        await authProvider.signup(
+          _authData['email'],
+          _authData['password'],
+        );
+      }
+
+      navState.pushReplacementNamed(ProductsOverviewScreen.routeName);
+    } on HttpException catch (httpEx) {
+      var errMsg = 'Failure!! ';
+      final httpExStr = httpEx.toString();
+      if (httpExStr.contains('EMAIL_EXISTS')) {
+        errMsg += 'This email is already in use';
+      } else if (httpExStr.contains("INVALID_EMAIL")) {
+        errMsg += 'You have invalid email address';
+      } else if (httpExStr.contains("WEAK_PASSWORD")) {
+        errMsg += 'You have a weak password';
+      } else {
+        errMsg += 'Some HttpException happened!!';
+      }
+
+      _showErrorDialog(errMsg);
+    } catch (generalException) {
+      final errMsg =
+          'Could not authenticate. Please try later. Your error message is ${generalException.toString()}';
+
+      _showErrorDialog(errMsg);
     }
+
     setState(() {
       _isLoading = false;
     });

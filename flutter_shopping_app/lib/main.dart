@@ -12,6 +12,7 @@ import './screens/cart_screen.dart';
 import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
+import './providers/auth_provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,32 +22,52 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: ProductsProvider(),
+          value: AuthProvider(),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, ProductsProvider>(
+          create: (ctx) => ProductsProvider.empty(),
+          update: (ctx, authProvider, previousProdProvider) =>
+              ProductsProvider.withProxy(
+            authProvider.token,
+            previousProdProvider == null ? [] : previousProdProvider.items,
+          ),
         ),
         ChangeNotifierProvider.value(
           value: CartProvider(),
         ),
-        ChangeNotifierProvider.value(
-          value: OrdersProvider(),
+        // ChangeNotifierProvider.value(
+        //   value: OrdersProvider(),
+        // ),
+        ChangeNotifierProxyProvider<AuthProvider, OrdersProvider>(
+          create: (ctx) => OrdersProvider.empty(),
+          update: (ctx, authProvider, prevOrdersProvider) =>
+              OrdersProvider.withProxy(
+            authProvider.token,
+            prevOrdersProvider == null ? [] : prevOrdersProvider.orders,
+          ),
         ),
       ],
-      child: MaterialApp(
-        title: APP_NAME_STRING,
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
+      child: Consumer<AuthProvider>(
+        builder: (ctx, authProvider, _) => MaterialApp(
+          title: APP_NAME_STRING,
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+          ),
+          home: authProvider.isAuthenticated
+              ? ProductsOverviewScreen()
+              : AuthScreen(),
+          routes: {
+            AuthScreen.routeName: (ctx) => AuthScreen(),
+            ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen(),
+            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+            CartScreen.routeName: (ctx) => CartScreen(),
+            OrdersScreen.routeName: (ctx) => OrdersScreen(),
+            UserProductScreen.routeName: (ctx) => UserProductScreen(),
+            EditProductScreen.routeName: (ctx) => EditProductScreen(),
+          },
         ),
-        home: AuthScreen(),
-        routes: {
-          AuthScreen.routeName: (ctx) => AuthScreen(),
-          ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen(),
-          ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-          CartScreen.routeName: (ctx) => CartScreen(),
-          OrdersScreen.routeName: (ctx) => OrdersScreen(),
-          UserProductScreen.routeName: (ctx) => UserProductScreen(),
-          EditProductScreen.routeName: (ctx) => EditProductScreen(),
-        },
       ),
     );
   }
