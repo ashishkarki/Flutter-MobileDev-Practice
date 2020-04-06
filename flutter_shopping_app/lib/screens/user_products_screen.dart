@@ -10,12 +10,13 @@ class UserProductScreen extends StatelessWidget {
   static final routeName = '/user-products';
 
   Future<void> _refreshProducts(BuildContext context) async {
-    await Provider.of<ProductsProvider>(context).fetechAndSetProducts();
+    await Provider.of<ProductsProvider>(context, listen: false)
+        .fetechAndSetProducts(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final productsProvider = Provider.of<ProductsProvider>(context);
+    //final productsProvider = Provider.of<ProductsProvider>(context);
     final navState = Navigator.of(context);
 
     return Scaffold(
@@ -31,27 +32,37 @@ class UserProductScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawerWidget(),
-      body: RefreshIndicator(
-        onRefresh: () => _refreshProducts(context),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemBuilder: (ctx, itemIdx) {
-              final product = productsProvider.items[itemIdx];
-              return Column(
-                children: [
-                  UserProductItem(
-                    product.id,
-                    product.title,
-                    product.imageUrl,
+      body: FutureBuilder(
+        future: _refreshProducts(context),
+        builder: (ctx, AsyncSnapshot snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () => _refreshProducts(context),
+                    child: Consumer<ProductsProvider>(
+                      builder: (ctx, productsProvider, _) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                          itemBuilder: (ctx, itemIdx) {
+                            final product = productsProvider.items[itemIdx];
+                            return Column(
+                              children: [
+                                UserProductItem(
+                                  product.id,
+                                  product.title,
+                                  product.imageUrl,
+                                ),
+                                Divider(),
+                              ],
+                            );
+                          },
+                          itemCount: productsProvider.items.length,
+                        ),
+                      ),
+                    ),
                   ),
-                  Divider(),
-                ],
-              );
-            },
-            itemCount: productsProvider.items.length,
-          ),
-        ),
       ),
     );
   }

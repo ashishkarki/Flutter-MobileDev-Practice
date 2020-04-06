@@ -32,10 +32,12 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
     return _items.firstWhere((product) => product.id == idToFind);
   }
 
-  Future<void> fetechAndSetProducts() async {
+  Future<void> fetechAndSetProducts([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     final getUrl = FIREBASE_WEB_SERVER_URL +
         FIREBASE_DB_PRODUCTS_SUFFIX +
-        '.json?auth=$authToken';
+        '.json?auth=$authToken&$filterString';
 
     try {
       final response = await http.get(getUrl);
@@ -79,7 +81,11 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
     try {
       final response = await http.post(
         postUrl,
-        body: productToJsonEncodedHelper(product, updateFavorite: false),
+        body: productToJsonEncodedHelper(
+          product,
+          userId,
+          updateFavorite: false,
+        ),
       );
 
       final newProduct = Product(
@@ -123,8 +129,11 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
 
         await http.patch(
           updateUrl,
-          body:
-              productToJsonEncodedHelper(updatedProduct, updateFavorite: false),
+          body: productToJsonEncodedHelper(
+            updatedProduct,
+            userId,
+            updateFavorite: false,
+          ),
         );
 
         _items[toBeUpdatedProductIndex] = updatedProduct;

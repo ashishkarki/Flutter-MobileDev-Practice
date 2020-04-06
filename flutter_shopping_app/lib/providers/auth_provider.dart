@@ -67,7 +67,7 @@ class AuthProvider with ChangeNotifier {
       // print(
       //     'login resp: ${response.statusCode}////\n ${jsonDecode(response.body)}');
       final responseMap = (jsonDecode(response.body) as Map<String, dynamic>);
-      print('responseMap: $responseMap');
+
       if (responseMap.containsKey('error')) {
         // even though status code is 200, if there is an 'error' key, there is a problem
         throw HttpException(responseMap['error']['message']);
