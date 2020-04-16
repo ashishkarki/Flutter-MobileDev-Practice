@@ -33,7 +33,7 @@ class AuthProvider with ChangeNotifier {
   Timer _authTimer;
 
   bool get isAuthenticated {
-    print('isauth: ${token != null}');
+    //print('isauth: ${token != null}');
     return token != null;
   }
 
