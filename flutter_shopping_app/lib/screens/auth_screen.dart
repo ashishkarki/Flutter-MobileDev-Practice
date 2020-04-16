@@ -126,11 +126,12 @@ class _AuthCardState extends State<AuthCard>
       ),
     );
     // empty setState to trigger build method to update the screen when height changes
-    _heightAnimation.addListener(
-      () => setState(
-        () {},
-      ),
-    );
+    // NOT NEEDED when using AnimationBuilder
+    // _heightAnimation.addListener(
+    //   () => setState(
+    //     () {},
+    //   ),
+    // );
   }
 
   @override
@@ -233,16 +234,21 @@ class _AuthCardState extends State<AuthCard>
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        // height: _authMode == AuthMode.Signup ? 320 : 260,
-        height: _heightAnimation.value.height,
-        constraints: BoxConstraints(
-          // minHeight: _authMode == AuthMode.Signup ? 320 : 260,
-          minHeight: _heightAnimation.value.height,
+      child: AnimatedBuilder(
+        animation: _heightAnimation,
+        builder: (ctx, animateBuilderChild) => Container(
+          // height: _authMode == AuthMode.Signup ? 320 : 260,
+          height: _heightAnimation.value.height,
+          constraints: BoxConstraints(
+            // minHeight: _authMode == AuthMode.Signup ? 320 : 260,
+            minHeight: _heightAnimation.value.height,
+          ),
+          width: deviceSize.width * 0.75,
+          padding: EdgeInsets.all(16.0),
+          child: animateBuilderChild,
         ),
-        width: deviceSize.width * 0.75,
-        padding: EdgeInsets.all(16.0),
         child: Form(
+          // this is passed back as 'animateBuilderChild' which doesn't get rebuilt
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
