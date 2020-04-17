@@ -43,7 +43,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         _isError = false;
       });
 
-      Provider.of<ProductsProvider>(context).fetechAndSetProducts().then((_) {
+      Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((_) {
         setState(() {
           _isLoading = false;
         });
