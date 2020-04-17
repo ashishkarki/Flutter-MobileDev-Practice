@@ -27,10 +27,13 @@ class ProductItem extends StatelessWidget {
               'productId': productProvider.id,
             });
           },
-          child: FadeInImage(
-            placeholder: AssetImage('assets/images/product-placeholder.png'),
-            image: NetworkImage(productProvider.imageUrl),
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: productProvider.id, // id to link small and large image
+            child: FadeInImage(
+              placeholder: AssetImage('assets/images/product-placeholder.png'),
+              image: NetworkImage(productProvider.imageUrl),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         header: Text(
