@@ -32,7 +32,7 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
     return _items.firstWhere((product) => product.id == idToFind);
   }
 
-  Future<void> fetechAndSetProducts([bool filterByUser = false]) async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     final filterString =
         filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     final getUrl = FIREBASE_WEB_SERVER_URL +
@@ -68,6 +68,7 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
 
       _items = productsFromFirebaseDB;
       notifyListeners();
+      printer();
     } on Exception catch (error) {
       throw error;
     }
@@ -171,5 +172,12 @@ class ProductsProvider extends CommonInterfaces with ChangeNotifier {
     }
     // if there is no error, de-reference the deleted, existing product from memory too
     existingProduct = null;
+  }
+
+  // helper method to debug
+  void printer() {
+    _items.forEach((item) {
+      print('${item.title}, ${item.description}, ${item.isFavorite} \n');
+    });
   }
 }
