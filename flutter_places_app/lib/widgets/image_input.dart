@@ -23,6 +23,10 @@ class _ImageInputWidgetState extends State<ImageInputWidget> {
       maxWidth: 600,
     );
 
+    if (imageFile == null) {
+      return;
+    }
+
     setState(() {
       _storedImage = imageFile;
     });
@@ -39,7 +43,7 @@ class _ImageInputWidgetState extends State<ImageInputWidget> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final mediaQry = MediaQuery.of(context);
-    print('mediaQry : ${mediaQry.size.width}, ${mediaQry.size.height}');
+    //print('mediaQry : ${mediaQry.size.width}, ${mediaQry.size.height}');
 
     return Row(
       children: <Widget>[

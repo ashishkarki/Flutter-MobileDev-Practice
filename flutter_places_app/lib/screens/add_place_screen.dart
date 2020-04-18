@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/image_input.dart';
+import '../providers/great_places_provider.dart';
 import '../constants.dart';
 
 class AddPlaceScreen extends StatefulWidget {
@@ -20,16 +22,32 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
     _selectedImage = userSelectedImg;
   }
 
-  void _savePlace() {
+  void _savePlace(
+    GreatPlaceProvider greatPlaceProvider,
+    NavigatorState navState,
+  ) {
     if (_titleController.text.isEmpty || _selectedImage == null) {
       showMyAlert(context, "Please add title and/or select image");
       return;
     }
+
+    greatPlaceProvider.addPlace(
+      _titleController.text,
+      _selectedImage,
+    );
+
+    // also pop this page
+    navState.pop();
   }
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final greatPlaceProvider = Provider.of<GreatPlaceProvider>(
+      context,
+      listen: false,
+    );
+    final navState = Navigator.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -65,7 +83,10 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
           RaisedButton.icon(
             icon: Icon(Icons.add),
             label: Text('Add Place'),
-            onPressed: () {},
+            onPressed: () => _savePlace(
+              greatPlaceProvider,
+              navState,
+            ),
             elevation: 0,
             materialTapTargetSize: MaterialTapTargetSize
                 .shrinkWrap, //makes button big without margins
