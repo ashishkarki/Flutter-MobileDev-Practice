@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 
 import './screens/add_place_screen.dart';
 
+enum COLUMN_NAME_HEADER {
+  ID,
+  TITLE,
+  IMGPATH,
+}
+const PLACES_DB_NAME_STRING = 'places.db';
+const PLACES_TABLE_NAME_STRING = 'user_places';
+const Map<COLUMN_NAME_HEADER, String> PLACES_TABLE_COLUMN_NAMES = {
+  COLUMN_NAME_HEADER.ID: 'id',
+  COLUMN_NAME_HEADER.TITLE: 'title',
+  COLUMN_NAME_HEADER.IMGPATH: 'imagePath',
+};
+
 Map<String, Widget Function(BuildContext)> getRouteTable(BuildContext context,
     {Object miscParams}) {
   final routes = {
