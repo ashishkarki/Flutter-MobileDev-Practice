@@ -10,3 +10,19 @@ Map<String, Widget Function(BuildContext)> getRouteTable(BuildContext context,
 
   return routes;
 }
+
+void showMyAlert(BuildContext ctx, String message) {
+  showDialog(
+    context: ctx,
+    builder: (ctx) => AlertDialog(
+      title: Text('Alert: some issue or error'),
+      content: Text(message),
+      actions: [
+        FlatButton(
+          onPressed: () => Navigator.of(ctx).pop(),
+          child: Text('Click to Close'),
+        ),
+      ],
+    ),
+  );
+}
