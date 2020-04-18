@@ -1,4 +1,5 @@
 import './providers/product.dart';
+import './config/credentials.dart' as creds;
 
 const APP_NAME_STRING = 'My Shopping App';
 
@@ -11,7 +12,7 @@ const FIREBASE_EMAIL_PW_SIGNUP_URL =
     'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=';
 const FIREBASE_EMAIL_PW_LOGIN_URL =
     'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=';
-const FIREBASE_WEB_API_KEY = 'AIzaSyDOehFkuM0xzoJFVa-nTompSpeKOhf1KkY';
+const FIREBASE_WEB_API_KEY = creds.FIREBASE_WEB_API_KEY;
 
 const REST_REQUEST_ERROR_TITLE = 'Error occured during REST request';
 
