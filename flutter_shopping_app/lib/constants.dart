@@ -12,7 +12,7 @@ const FIREBASE_EMAIL_PW_SIGNUP_URL =
     'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=';
 const FIREBASE_EMAIL_PW_LOGIN_URL =
     'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=';
-const FIREBASE_WEB_API_KEY = config.FIREBASE_WEB_API_KEY;
+const FIREBASE_WEB_API_KEY = config.FIREBASE_WEB_API_KEY1;
 
 const REST_REQUEST_ERROR_TITLE = 'Error occured during REST request';
 
