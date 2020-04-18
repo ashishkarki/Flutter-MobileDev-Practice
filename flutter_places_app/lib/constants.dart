@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import './screens/add_place_screen.dart';
 
+const GOOGLE_MAPS_API_KEY = 'AIzaSyA-Jr5LL4kkqU0Qkb2sI6NRpJ-6fO8BEZs';
+
 enum COLUMN_NAME_HEADER {
   ID,
   TITLE,

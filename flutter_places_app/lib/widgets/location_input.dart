@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 class LocationInputWidget extends StatefulWidget {
   @override
@@ -7,6 +8,11 @@ class LocationInputWidget extends StatefulWidget {
 
 class _LocationInputWidgetState extends State<LocationInputWidget> {
   String _previewLocationImgUrl;
+
+  Future<void> _getCurrentUserLocation() async {
+    final locationData = await Location().getLocation();
+    print('location long: ${locationData.longitude}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +23,12 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
           height: 150,
           width: double.infinity,
           alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: Colors.grey,
+            ),
+          ),
           child: _previewLocationImgUrl == null
               ? Text(
                   'No location selected',
@@ -29,14 +41,15 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
                 ),
         ),
         Wrap(
-          // direction: Axis.horizontal,
-          // alignment: WrapAlignment.start,
+          direction: Axis
+              .vertical, // just keeping this, doesn't seem to have any effect
+          alignment: WrapAlignment.center,
           // textDirection: TextDirection.ltr,
-          spacing: 40.0,
+          spacing: 20.0,
           //runSpacing: 20.0,
           children: [
             FlatButton.icon(
-              onPressed: () {},
+              onPressed: _getCurrentUserLocation,
               icon: Icon(
                 Icons.location_on,
               ),
