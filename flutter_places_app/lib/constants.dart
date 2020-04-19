@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './screens/add_place_screen.dart';
 import './config/configuration.dart' as config;
+import 'screens/place_detail_screen.dart';
 
 const API_KEY_FOR_GOOGLE_MAPS = config.API_KEY_FOR_GOOGLE_MAPS;
 
@@ -22,6 +23,7 @@ Map<String, Widget Function(BuildContext)> getRouteTable(BuildContext context,
     {Object miscParams}) {
   final routes = {
     AddPlaceScreen.routeName: (BuildContext context) => AddPlaceScreen(),
+    PlaceDetailScreen.routeName: (BuildContext context) => PlaceDetailScreen(),
   };
 
   return routes;

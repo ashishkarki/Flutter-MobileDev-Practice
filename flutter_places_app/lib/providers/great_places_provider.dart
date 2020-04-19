@@ -75,4 +75,8 @@ class GreatPlaceProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  Place findPlaceById(String idToFind) {
+    return _items.firstWhere((element) => element.id == idToFind);
+  }
 }
