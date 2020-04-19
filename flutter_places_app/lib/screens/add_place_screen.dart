@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/image_input.dart';
+import '../models/place.dart';
 import '../widgets/location_input.dart';
 import '../providers/great_places_provider.dart';
 import '../constants.dart';
@@ -18,8 +19,14 @@ class AddPlaceScreen extends StatefulWidget {
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleController = TextEditingController();
   File _selectedImage;
+  PlaceLocation _userSelectedLocation;
 
-  void _selectPlace(double lat, double lng) {}
+  void _selectPlace(double lat, double lng) {
+    _userSelectedLocation = PlaceLocation(
+      latitude: lat,
+      longitude: lng,
+    );
+  }
 
   void _selectImage(File userSelectedImg) {
     _selectedImage = userSelectedImg;
@@ -29,15 +36,15 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
     GreatPlaceProvider greatPlaceProvider,
     NavigatorState navState,
   ) {
-    if (_titleController.text.isEmpty || _selectedImage == null) {
-      showMyAlert(context, "Please add title and/or select image");
+    if (_titleController.text.isEmpty ||
+        _selectedImage == null ||
+        _userSelectedLocation == null) {
+      showMyAlert(context, "Please add title and/or select image/location");
       return;
     }
 
     greatPlaceProvider.addPlace(
-      _titleController.text,
-      _selectedImage,
-    );
+        _titleController.text, _selectedImage, _userSelectedLocation);
 
     // also pop this page
     navState.pop();
