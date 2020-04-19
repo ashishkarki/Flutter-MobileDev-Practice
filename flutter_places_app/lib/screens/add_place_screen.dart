@@ -19,6 +19,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleController = TextEditingController();
   File _selectedImage;
 
+  void _selectPlace(double lat, double lng) {}
+
   void _selectImage(File userSelectedImg) {
     _selectedImage = userSelectedImg;
   }
@@ -79,7 +81,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    LocationInputWidget(),
+                    LocationInputWidget(_selectPlace),
                   ],
                 ),
               ),

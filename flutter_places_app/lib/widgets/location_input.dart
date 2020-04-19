@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_places_app/screens/map_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+import '../helpers/location_helper.dart';
+
 class LocationInputWidget extends StatefulWidget {
+  final void Function(double, double) onSelectPlace;
+
+  LocationInputWidget(this.onSelectPlace);
+
   @override
   _LocationInputWidgetState createState() => _LocationInputWidgetState();
 }
@@ -11,7 +19,34 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
 
   Future<void> _getCurrentUserLocation() async {
     final locationData = await Location().getLocation();
-    print('location long: ${locationData.longitude}');
+    final staticMapImgUrl = LocationHelper.generateLocationPreviewImage(
+      latitude: locationData.latitude,
+      longitude: locationData.longitude,
+    );
+
+    setState(() {
+      _previewLocationImgUrl = staticMapImgUrl;
+    });
+
+    widget.onSelectPlace(locationData.latitude, locationData.longitude);
+  }
+
+  Future<void> _selectOnMap() async {
+    final LatLng selectedLocation = await Navigator.of(context).push<LatLng>(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (ctx) => MapScreen(
+          isSelecting: true,
+        ),
+      ),
+    );
+
+    if (selectedLocation == null) {
+      return;
+    }
+
+    // else process the data
+    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
@@ -57,7 +92,7 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
               textColor: Theme.of(context).primaryColor,
             ),
             FlatButton.icon(
-              onPressed: () {},
+              onPressed: _selectOnMap,
               icon: Icon(
                 Icons.map,
               ),
