@@ -3,8 +3,6 @@ import 'package:flutter_places_app/constants.dart';
 import 'package:flutter_places_app/screens/map_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:path/path.dart';
-
 import '../helpers/location_helper.dart';
 
 class LocationInputWidget extends StatefulWidget {

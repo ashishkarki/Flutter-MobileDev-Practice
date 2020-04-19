@@ -1,4 +1,4 @@
-package com.example.flutter_places_app
+package com.karkia.flutter_places_app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
