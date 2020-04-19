@@ -1,21 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_places_app/constants.dart';
+import 'package:flutter_places_app/screens/map_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:path/path.dart';
+
+import '../helpers/location_helper.dart';
 
 class LocationInputWidget extends StatefulWidget {
+  final void Function(double, double) onSelectPlace;
+
+  LocationInputWidget(this.onSelectPlace);
+
   @override
   _LocationInputWidgetState createState() => _LocationInputWidgetState();
 }
 
 class _LocationInputWidgetState extends State<LocationInputWidget> {
   String _previewLocationImgUrl;
+  BuildContext ourBuildCtx;
+
+  void _loadPreviewMap(double latitude, double longitude) {
+    final staticMapImgUrl = LocationHelper.generateLocationPreviewImage(
+      latitude: latitude,
+      longitude: longitude,
+    );
+
+    setState(() {
+      _previewLocationImgUrl = staticMapImgUrl;
+    });
+  }
 
   Future<void> _getCurrentUserLocation() async {
-    final locationData = await Location().getLocation();
-    print('location long: ${locationData.longitude}');
+    try {
+      final locationData = await Location().getLocation();
+
+      _loadPreviewMap(locationData.latitude, locationData.longitude);
+
+      widget.onSelectPlace(locationData.latitude, locationData.longitude);
+    } catch (exception) {
+      // for example if the user doesn't grant us permission to get lcoation
+      showMyAlert(ourBuildCtx, 'Location error:provide access to location');
+    }
+  }
+
+  Future<void> _selectOnMap() async {
+    final LatLng selectedLocation =
+        await Navigator.of(ourBuildCtx).push<LatLng>(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (ctx) => MapScreen(
+          isSelecting: true,
+        ),
+      ),
+    );
+
+    if (selectedLocation == null) {
+      return;
+    }
+
+    // else process the data
+    _loadPreviewMap(selectedLocation.latitude, selectedLocation.longitude);
+
+    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
   Widget build(BuildContext context) {
+    ourBuildCtx = context;
+
     return Column(
       children: [
         Container(
@@ -57,7 +110,7 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
               textColor: Theme.of(context).primaryColor,
             ),
             FlatButton.icon(
-              onPressed: () {},
+              onPressed: _selectOnMap,
               icon: Icon(
                 Icons.map,
               ),
