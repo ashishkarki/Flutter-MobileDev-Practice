@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './user-information.dart';
+
 class MiCardLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,25 +36,11 @@ class MiCardLayout extends StatelessWidget {
           height: 5,
           width: 200,
         ),
-        Card(
-          elevation: 5,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Icon(Icons.phone),
-              Text('+977-9841234567'),
-            ],
-          ),
-        ),
-        Card(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(Icons.mail),
-              Text('ak@gmail.com'),
-            ],
-          ),
+        UserInformation(Icons.phone, '+977-984000000'),
+        UserInformation(
+          Icons.mail,
+          'ashishk@supergmail.com',
+          informationFontSize: 15.0,
         ),
       ],
     );
