@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './layout-challenge.dart';
+import './mi-card-layout.dart';
 
 void main() {
   runApp(
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.teal,
-        body: LayoutChallenge(),
+        body: MiCardLayout(),
       ),
     );
   }
