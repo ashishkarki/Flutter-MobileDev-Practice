@@ -8,27 +8,31 @@ class MiCardLayout extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CircleAvatar(
-          child: Icon(Icons.photo_album),
+          radius: 50.0,
+          backgroundImage: AssetImage('assets/images/AshishKarki_ProPhoto.jpg'),
         ),
-        Container(
-          child: Text(
-            'Ashish Karki',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontStyle: FontStyle.italic,
-            ),
+        Text(
+          'Ashish Karki',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pacifico',
           ),
         ),
-        Container(
-          child: Text(
-            'FLUTTER DEVELOPER',
-            style: TextStyle(
-              color: Colors.cyan,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+        Text(
+          'FLUTTER DEVELOPER',
+          style: TextStyle(
+            color: Colors.teal.shade100,
+            fontSize: 20,
+            letterSpacing: 2.5,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'SourceSansPro',
           ),
+        ),
+        SizedBox(
+          height: 5,
+          width: 200,
         ),
         Card(
           elevation: 5,
