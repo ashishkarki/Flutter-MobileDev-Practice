@@ -12,8 +12,8 @@ class NoteListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       //height: 50.0,
-      color: noteColor,
-      child: CustomAudioPlayer(noteToPlay),
+      // color: noteColor,
+      child: CustomAudioPlayer(noteToPlay, noteColor),
     );
   }
 }
