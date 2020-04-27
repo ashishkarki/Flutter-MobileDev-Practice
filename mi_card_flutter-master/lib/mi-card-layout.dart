@@ -33,13 +33,19 @@ class MiCardLayout extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 5,
-          width: 200,
+          height: 20,
+          width: 150,
+          child: Divider(
+            color: Colors.teal.shade100,
+          ),
         ),
-        UserInformation(Icons.phone, '+977-984000000'),
+        UserInformation(
+          Icons.phone,
+          '+977-984000000',
+        ),
         UserInformation(
           Icons.mail,
-          'ashishk@supergmail.com',
+          'ashishk@emailer.com',
           informationFontSize: 15.0,
         ),
       ],

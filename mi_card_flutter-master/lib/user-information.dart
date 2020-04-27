@@ -23,24 +23,19 @@ class UserInformation extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: Colors.teal,
+        child: ListTile(
+          leading: Icon(
+            icon,
+            color: Colors.teal,
+          ),
+          title: Text(
+            information,
+            style: TextStyle(
+              color: Colors.teal.shade900,
+              fontFamily: 'SourceSansPro',
+              fontSize: informationFontSize,
             ),
-            SizedBox(
-              width: 10.0,
-            ),
-            Text(
-              information,
-              style: TextStyle(
-                color: Colors.teal.shade900,
-                fontFamily: 'SourceSansPro',
-                fontSize: informationFontSize,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
