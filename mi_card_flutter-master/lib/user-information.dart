@@ -14,31 +14,34 @@ class UserInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
       color: Colors.white,
-      padding: const EdgeInsets.all(10.0),
+      // padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.symmetric(
         vertical: 10.0,
         horizontal: 20.0,
       ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: Colors.teal,
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          Text(
-            information,
-            style: TextStyle(
-              color: Colors.teal.shade900,
-              fontFamily: 'SourceSansPro',
-              fontSize: informationFontSize,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: Colors.teal,
             ),
-          ),
-        ],
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              information,
+              style: TextStyle(
+                color: Colors.teal.shade900,
+                fontFamily: 'SourceSansPro',
+                fontSize: informationFontSize,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
