@@ -46,14 +46,26 @@ class _QuizPageState extends State<QuizPage> {
     'You can lead a cow down stairs but not up stairs.': 'False',
     'Approximately one quarter of human bones are in the feet.': 'True',
     'A slug\'s blood is green.': 'True',
-    'YOU ANSWERED ALL QUESTIONS': 'NULL',
+    //'YOU ANSWERED ALL QUESTIONS': 'NULL',
   };
 
   void onResponseButtonPressed(ResponseButtonType buttonType) {
     if (quizQuesandAnsIndex < quizQuesandAnsMap.length) {
       setState(
         () {
+          final String correctAnswer =
+              quizQuesandAnsMap.values.elementAt(quizQuesandAnsIndex);
+          if (responseButtonStringUtil(buttonType).toLowerCase() ==
+              correctAnswer.toLowerCase()) {
+            scoreKeeper.add(correctResponseIcon);
+          } else {
+            scoreKeeper.add(incorrectResponseIcon);
+          }
+
+          // now update the question index
           quizQuesandAnsIndex++;
+          // HACK to prevent index error
+          quizQuesandAnsIndex = quizQuesandAnsIndex % quizQuesandAnsMap.length;
         },
       );
     }
@@ -65,21 +77,20 @@ class _QuizPageState extends State<QuizPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        QuestionDisplay(
-          quizQuesandAnsMap.keys.elementAt(quizQuesandAnsIndex),
+        if (quizQuesandAnsIndex < quizQuesandAnsMap.length)
+          QuestionDisplay(
+            quizQuesandAnsMap.keys.elementAt(quizQuesandAnsIndex),
+          ),
+        SelectionButton(
+          buttonType: ResponseButtonType.TRUE,
+          buttonColor: Colors.green,
+          onButtonPressed: onResponseButtonPressed,
         ),
-        if (quizQuesandAnsIndex < quizQuesandAnsMap.length - 1)
-          SelectionButton(
-            buttonType: ResponseButtonType.TRUE,
-            buttonColor: Colors.green,
-            onButtonPressed: onResponseButtonPressed,
-          ),
-        if (quizQuesandAnsIndex < quizQuesandAnsMap.length - 1)
-          SelectionButton(
-            buttonType: ResponseButtonType.FALSE,
-            buttonColor: Colors.red,
-            onButtonPressed: onResponseButtonPressed,
-          ),
+        SelectionButton(
+          buttonType: ResponseButtonType.FALSE,
+          buttonColor: Colors.red,
+          onButtonPressed: onResponseButtonPressed,
+        ),
         ScoreKeeper(scoreKeeper),
       ],
     );

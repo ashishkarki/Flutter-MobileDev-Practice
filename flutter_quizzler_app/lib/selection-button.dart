@@ -22,7 +22,7 @@ class SelectionButton extends StatelessWidget {
           textColor: Colors.white,
           color: buttonColor,
           child: Text(
-            buttonType.toString(),
+            responseButtonStringUtil(buttonType),
             style: TextStyle(
               color: Colors.white,
               fontSize: 20.0,
