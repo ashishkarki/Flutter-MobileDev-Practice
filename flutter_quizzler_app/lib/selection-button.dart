@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import './common-values.dart';
+
 class SelectionButton extends StatelessWidget {
-  final String buttonText;
+  final ResponseButtonType buttonType;
   final Color buttonColor;
   final Function onButtonPressed;
 
   const SelectionButton({
-    this.buttonText = 'True',
+    this.buttonType = ResponseButtonType.TRUE,
     this.buttonColor = Colors.red,
     this.onButtonPressed,
   });
@@ -20,15 +22,13 @@ class SelectionButton extends StatelessWidget {
           textColor: Colors.white,
           color: buttonColor,
           child: Text(
-            buttonText,
+            buttonType.toString(),
             style: TextStyle(
               color: Colors.white,
               fontSize: 20.0,
             ),
           ),
-          onPressed: () {
-            onButtonPressed();
-          },
+          onPressed: () => onButtonPressed(buttonType),
         ),
       ),
     );
