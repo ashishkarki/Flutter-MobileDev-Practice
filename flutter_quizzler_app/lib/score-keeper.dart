@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-enum ResponseType {
-  CORRECT,
-  INCORRECT,
-}
-
 class ScoreKeeper extends StatelessWidget {
   final List<Icon> scoreKeeper;
 
